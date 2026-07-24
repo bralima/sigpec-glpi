@@ -6,7 +6,11 @@
     <title>Inclusão de Novo Usuário - GLPI SIGPEC</title>
     <style>
         /* ===== RESET E BASE ===== */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: 'Inter', sans-serif;
             background: #F5F7FB;
@@ -86,7 +90,10 @@
             font-size: 14px;
             color: #000;
         }
-        .cabecalho .breadcrumb .home-icon { width: 18px; height: 18px; }
+        .cabecalho .breadcrumb .home-icon {
+            width: 18px;
+            height: 18px;
+        }
         .cabecalho .usuario-dropdown {
             display: flex;
             align-items: center;
@@ -99,46 +106,33 @@
         .form-container {
             background: #FFFFFF;
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-            border-radius: 4px;
-            padding: 20px 30px;
             max-width: 700px;
             width: 100%;
             margin: 0 auto;
+            border-radius: 4px;
+            overflow: hidden;
         }
         .form-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 8px;
+            padding: 15px 25px;
+            background: #F5F7FC;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
         .form-header h2 {
-            font-size: 26px;
+            font-size: 20px;
             font-weight: 600;
             color: #000;
             margin: 0;
         }
-        .form-header .icon {
-            width: 40px;
-            height: 40px;
-            background: #D9D9D9;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .form-header .icon svg {
-            width: 30px;
-            height: 30px;
+        .form-header svg {
+            width: 32px;
+            height: 32px;
             fill: #1C1B1F;
         }
-        .dados-chamado {
-            background: #F5F7FC;
-            border: 1px solid rgba(0,0,0,0.1);
-            padding: 8px 20px;
-            margin: 0 -20px 20px -20px;
-            font-size: 16px;
-            color: #3B73A7;
-            font-weight: 400;
+        .form-body {
+            padding: 20px 25px;
         }
         .campo {
             margin-bottom: 18px;
@@ -150,7 +144,7 @@
             color: #000;
             margin-bottom: 4px;
         }
-        .campo label .info {
+        .campo label .info-icon {
             display: inline-block;
             width: 18px;
             height: 18px;
@@ -158,341 +152,317 @@
             border-radius: 50%;
             text-align: center;
             line-height: 18px;
+            color: #fff;
             font-size: 12px;
-            color: #1C1B1F;
             margin-left: 4px;
-            cursor: default;
+            cursor: help;
         }
-        .campo input, .campo select {
+        .campo input,
+        .campo select {
             width: 100%;
-            padding: 6px 10px;
+            padding: 8px 12px;
             border: 1px solid #D9DBDE;
             border-radius: 4px;
             font-size: 13px;
+            font-family: 'Inter', sans-serif;
             background: #FFFFFF;
-            height: 30px;
         }
         .campo select[multiple] {
-            height: auto;
-            min-height: 80px;
-            padding: 4px;
+            height: 100px;
         }
-        .campo select[multiple] option {
-            padding: 4px 8px;
-        }
-        .radio-group {
+        .campo .radio-group {
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
             margin-top: 4px;
         }
-        .radio-group label {
+        .campo .radio-group label {
+            font-weight: 400;
+            font-size: 13px;
             display: flex;
             align-items: center;
             gap: 5px;
-            font-weight: 400;
-            font-size: 13px;
-            color: #000;
             cursor: pointer;
         }
-        .radio-group input[type="radio"] {
+        .campo .radio-group input[type="radio"] {
             width: auto;
-            height: auto;
-            margin-right: 2px;
+            accent-color: #5B5083;
         }
-        .aviso {
-            background: #FFF3CD;
-            border-left: 4px solid #FFC107;
-            padding: 6px 12px;
+        .campo .aviso {
             font-size: 12px;
-            color: #856404;
+            color: #d9534f;
             margin-top: 4px;
-            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .campo .aviso svg {
+            width: 16px;
+            height: 16px;
+            fill: #d9534f;
         }
         .campo-extra {
             display: none;
         }
-        .campo-extra.ativo {
+        .campo-extra.visible {
             display: block;
         }
-        .bt-enviar {
+        .btn-enviar {
             background: #FFFFFF;
             border: 1px solid #D9D9D9;
             border-radius: 4px;
-            padding: 8px 24px;
+            padding: 10px 30px;
             font-size: 15px;
+            font-weight: 400;
             color: #000;
             cursor: pointer;
+            transition: background 0.2s;
             margin-top: 10px;
-            transition: 0.2s;
         }
-        .bt-enviar:hover {
+        .btn-enviar:hover {
             background: #f0f0f0;
         }
         /* ===== RESPONSIVO ===== */
         @media (max-width: 768px) {
-            .form-container { padding: 15px; }
-            .dados-chamado { margin: 0 -15px 15px -15px; }
-        }
-        @media (max-width: 480px) {
-            .menu-lateral { width: 60px; padding: 20px 10px; }
-            .menu-lateral .requisicoes .item span { display: none; }
-            .menu-lateral .recolher span { display: none; }
-            .form-header h2 { font-size: 20px; }
+            .menu-lateral {
+                width: 60px;
+                padding: 20px 10px;
+            }
+            .menu-lateral .requisicoes .item span {
+                display: none;
+            }
+            .menu-lateral .recolher span {
+                display: none;
+            }
+            .form-body {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- ===== MENU LATERAL ===== -->
-<div class="menu-lateral">
-    <div class="requisicoes">
-        <a href="../dashboard.html" class="item">
-            <svg viewBox="0 0 24 24"><path d="M12 1C7.58 1 4 4.58 4 9v3c0 4.42 3.58 8 8 8s8-3.58 8-8v-3c0-4.42-3.58-8-8-8zm0 2c3.31 0 6 2.69 6 6v3c0 3.31-2.69 6-6 6s-6-2.69-6-6v-3c0-3.31 2.69-6 6-6z"/></svg>
-            <span>Serviços</span>
-        </a>
-        <a href="../meus-chamados.html" class="item">
-            <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
-            <span>Meus Chamados</span>
-        </a>
-        <div class="item">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-            <span>FAQ</span>
+    <!-- ===== MENU LATERAL ===== -->
+    <div class="menu-lateral">
+        <div class="requisicoes">
+            <a href="../dashboard.html" class="item">
+                <svg viewBox="0 0 24 24"><path d="M12 1C7.58 1 4 4.58 4 9v3c0 4.42 3.58 8 8 8s8-3.58 8-8v-3c0-4.42-3.58-8-8-8zm0 2c3.31 0 6 2.69 6 6v3c0 3.31-2.69 6-6 6s-6-2.69-6-6v-3c0-3.31 2.69-6 6-6z"/></svg>
+                <span>Serviços</span>
+            </a>
+            <a href="../meus-chamados.html" class="item">
+                <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
+                <span>Meus Chamados</span>
+            </a>
+            <div class="item">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                <span>FAQ</span>
+            </div>
+            <div class="item">
+                <svg viewBox="0 0 24 24"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>
+                <span>Reservas</span>
+            </div>
         </div>
-        <div class="item">
-            <svg viewBox="0 0 24 24"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>
-            <span>Reservas</span>
-        </div>
-    </div>
-    <div class="recolher">
-        <svg viewBox="0 0 24 24" width="24" height="24"><path d="M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"/></svg>
-        <span>Recolher Menu</span>
-    </div>
-</div>
-
-<!-- ===== CONTEÚDO ===== -->
-<div class="conteudo">
-
-    <!-- Cabeçalho -->
-    <div class="cabecalho">
-        <div class="breadcrumb">
-            <svg class="home-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-            <span>Home /</span>
-            <span style="color:#000;">Serviços /</span>
-            <span style="color:#000;">Inclusão de Novo Usuário</span>
-        </div>
-        <div class="usuario-dropdown">
-            <span>Usuário</span>
-            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 10l5 5 5-5z"/></svg>
+        <div class="recolher">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"/></svg>
+            <span>Recolher Menu</span>
         </div>
     </div>
 
-    <!-- Formulário -->
-    <div class="form-container">
-        <div class="form-header">
-            <h2>Inclusão de Novo Usuário</h2>
-            <div class="icon">
+    <!-- ===== CONTEÚDO ===== -->
+    <div class="conteudo">
+
+        <!-- Cabeçalho -->
+        <div class="cabecalho">
+            <div class="breadcrumb">
+                <svg class="home-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                <span>Home /</span>
+                <span style="color:#000;">Serviços /</span>
+                <span style="color:#3B73A7;">Inclusão de Novo Usuário</span>
+            </div>
+            <div class="usuario-dropdown">
+                <span>Usuário</span>
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 10l5 5 5-5z"/></svg>
+            </div>
+        </div>
+
+        <!-- Formulário -->
+        <div class="form-container">
+            <div class="form-header">
                 <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <h2>Inclusão de Novo Usuário</h2>
+            </div>
+            <div class="form-body">
+                <form id="formNovoUsuario">
+
+                    <!-- Tipo de Usuário -->
+                    <div class="campo">
+                        <label>Tipo de Usuário *</label>
+                        <div class="radio-group" id="tipoUsuario">
+                            <label><input type="radio" name="tipo" value="servidor" checked /> Servidor</label>
+                            <label><input type="radio" name="tipo" value="estagiario" /> Estagiário</label>
+                            <label><input type="radio" name="tipo" value="residente" /> Residente</label>
+                            <label><input type="radio" name="tipo" value="tercerizado" /> Terceirizado</label>
+                        </div>
+                    </div>
+
+                    <!-- Nome Completo -->
+                    <div class="campo">
+                        <label>Nome Completo</label>
+                        <input type="text" id="nomeCompleto" placeholder="Digite o nome completo" />
+                    </div>
+
+                    <!-- Campo de identificação (dinâmico) -->
+                    <div class="campo" id="campoIdentificacao">
+                        <label id="labelIdentificacao">Registro / Vínculo</label>
+                        <input type="text" id="inputIdentificacao" placeholder="Digite o registro ou vínculo" />
+                        <div id="avisoIdentificacao" class="aviso" style="display:none;">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            ⚠️ Apenas para consultas, sem alterações.
+                        </div>
+                    </div>
+
+                    <!-- Campo extra para terceirizado (justificativa adicional) -->
+                    <div class="campo campo-extra" id="campoJustificativaExtra">
+                        <label>Justificativa (para terceirizado)</label>
+                        <input type="text" id="justificativaExtra" placeholder="Informe a justificativa" />
+                    </div>
+
+                    <!-- Padrão de Acesso (multi-select) -->
+                    <div class="campo">
+                        <label>Padrão de Acesso</label>
+                        <select multiple id="padraoAcesso">
+                            <option value="BASICO">BASICO</option>
+                            <option value="CONSULTA_GERAL">CONSULTA_GERAL</option>
+                            <option value="Ergon">Ergon</option>
+                            <option value="AHM_PARCELAMEN">AHM_PARCELAMEN</option>
+                            <option value="CADASTRO">CADASTRO</option>
+                            <option value="DEBITOS">DEBITOS</option>
+                            <option value="FOLHA_UNIDADES">FOLHA_UNIDADES</option>
+                            <option value="APOS/EXONER">APOS/EXONER</option>
+                            <option value="SEG HOLERITE">SEG HOLERITE</option>
+                            <option value="AUX_FUNERAL">AUX_FUNERAL</option>
+                            <option value="ACESSO_WEB">ACESSO_WEB</option>
+                        </select>
+                        <small style="color:#666; font-size:11px;">Segure Ctrl (ou Cmd) para selecionar múltiplos</small>
+                    </div>
+
+                    <!-- Justificativa (fixa) -->
+                    <div class="campo">
+                        <label>Justificativa</label>
+                        <input type="text" id="justificativa" placeholder="Descreva a justificativa" />
+                    </div>
+
+                    <!-- Perfil de Setor -->
+                    <div class="campo">
+                        <label>Perfil de Setor</label>
+                        <select id="perfilSetor">
+                            <option value="">Selecione...</option>
+                            <option value="CMSP">CMSP</option>
+                            <option value="GERAL">GERAL</option>
+                            <option value="IPREM">IPREM</option>
+                            <option value="PENSIONISTA">PENSIONISTA</option>
+                            <option value="SFMSP">SFMSP</option>
+                            <option value="TCMSP">TCMSP</option>
+                            <option value="AHM_GERAL">AHM_GERAL</option>
+                            <option value="MUNICIPALIZADOS">MUNICIPALIZADOS</option>
+                            <option value="SMS">SMS</option>
+                            <option value="IPREM_APOS">IPREM_APOS</option>
+                            <option value="APOS_SME">APOS_SME</option>
+                            <option value="SME">SME</option>
+                            <option value="AFASTADOS">AFASTADOS</option>
+                            <option value="AHM-JSH">AHM-JSH</option>
+                            <option value="AMLURB">AMLURB</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn-enviar" onclick="enviarForm()">Enviar</button>
+                </form>
             </div>
         </div>
-
-        <div class="dados-chamado">Dados do Chamado</div>
-
-        <!-- Tipo de Usuário -->
-        <div class="campo">
-            <label>Tipo de Usuário * <span class="info">ⓘ</span></label>
-            <div class="radio-group" id="tipoUsuario">
-                <label><input type="radio" name="tipo" value="servidor" checked /> Servidor</label>
-                <label><input type="radio" name="tipo" value="estagiario" /> Estagiário</label>
-                <label><input type="radio" name="tipo" value="residente" /> Residente</label>
-                <label><input type="radio" name="tipo" value="tercerizado" /> Terceirizado</label>
-            </div>
-        </div>
-
-        <!-- Nome Completo (sempre visível) -->
-        <div class="campo">
-            <label>Nome Completo <span class="info">ⓘ</span></label>
-            <input type="text" id="nomeCompleto" placeholder="Digite o nome completo" />
-        </div>
-
-        <!-- Campo dinâmico: Registro/Vínculo ou RG -->
-        <div class="campo" id="campoRegistro">
-            <label id="labelRegistro">Registro / Vínculo <span class="info">ⓘ</span></label>
-            <input type="text" id="registro" placeholder="Digite o registro ou vínculo" />
-        </div>
-
-        <!-- Aviso para estagiário (aparece dinamicamente) -->
-        <div class="aviso" id="avisoEstagiario" style="display: none;">
-            ⚠️ Apenas para consultas, sem alterações.
-        </div>
-
-        <!-- Campo extra para Terceirizado: Justificativa -->
-        <div class="campo campo-extra" id="campoJustificativaExtra">
-            <label>Justificativa <span class="info">ⓘ</span></label>
-            <input type="text" id="justificativaExtra" placeholder="Justificativa para terceirizado" />
-        </div>
-
-        <!-- Padrão de Acesso (múltipla seleção) -->
-        <div class="campo">
-            <label>Padrão de Acesso <span class="info">ⓘ</span></label>
-            <select multiple id="padraoAcesso">
-                <!-- As opções serão inseridas via JavaScript -->
-            </select>
-            <small style="color:#666; font-size:11px;">Segure Ctrl (ou Cmd) para selecionar múltiplos</small>
-        </div>
-
-        <!-- Perfil de Setor (única seleção) -->
-        <div class="campo">
-            <label>Perfil de Setor <span class="info">ⓘ</span></label>
-            <select id="perfilSetor">
-                <!-- Opções via JavaScript -->
-            </select>
-        </div>
-
-        <button class="bt-enviar" id="btnEnviar">Enviar</button>
     </div>
 
-</div>
+    <script>
+        // ===== LÓGICA DINÂMICA =====
+        const tipoRadios = document.querySelectorAll('input[name="tipo"]');
+        const labelIdentificacao = document.getElementById('labelIdentificacao');
+        const inputIdentificacao = document.getElementById('inputIdentificacao');
+        const avisoIdentificacao = document.getElementById('avisoIdentificacao');
+        const campoJustificativaExtra = document.getElementById('campoJustificativaExtra');
 
-<script>
-    // ===== DADOS =====
-    const padroesAcesso = [
-        'BASICO',
-        'CONSULTA_GERAL',
-        'Ergon',
-        'AHM_PARCELAMEN',
-        'CADASTRO',
-        'DEBITOS',
-        'FOLHA_UNIDADES',
-        'APOS/EXONER',
-        'SEG HOLERITE',
-        'AUX_FUNERAL',
-        'ACESSO_WEB'
-    ];
+        function atualizarCampos() {
+            let tipo = document.querySelector('input[name="tipo"]:checked').value;
 
-    const perfisSetor = [
-        'CMSP',
-        'GERAL',
-        'IPREM',
-        'PENSIONISTA',
-        'SFMSP',
-        'TCMSP',
-        'AHM_GERAL',
-        'MUNICIPALIZADOS',
-        'SMS',
-        'IPREM_APOS',
-        'APOS_SME',
-        'SME',
-        'AFASTADOS',
-        'AHM-JSH',
-        'AMLURB'
-    ];
+            // Reset
+            avisoIdentificacao.style.display = 'none';
+            campoJustificativaExtra.classList.remove('visible');
 
-    // ===== POPULAR SELECTS =====
-    const padraoSelect = document.getElementById('padraoAcesso');
-    padroesAcesso.forEach(p => {
-        const opt = document.createElement('option');
-        opt.value = p;
-        opt.textContent = p;
-        padraoSelect.appendChild(opt);
-    });
-
-    const perfilSelect = document.getElementById('perfilSetor');
-    perfisSetor.forEach(p => {
-        const opt = document.createElement('option');
-        opt.value = p;
-        opt.textContent = p;
-        perfilSelect.appendChild(opt);
-    });
-
-    // ===== CONTROLE DINÂMICO DOS CAMPOS =====
-    const radios = document.querySelectorAll('input[name="tipo"]');
-    const campoRegistro = document.getElementById('campoRegistro');
-    const labelRegistro = document.getElementById('labelRegistro');
-    const inputRegistro = document.getElementById('registro');
-    const avisoEstagiario = document.getElementById('avisoEstagiario');
-    const campoJustificativaExtra = document.getElementById('campoJustificativaExtra');
-
-    function atualizarCampos() {
-        const tipoSelecionado = document.querySelector('input[name="tipo"]:checked').value;
-
-        // Resetar visibilidade
-        campoRegistro.style.display = 'block';
-        avisoEstagiario.style.display = 'none';
-        campoJustificativaExtra.classList.remove('ativo');
-
-        // Servidor ou Residente: Registro/Vínculo
-        if (tipoSelecionado === 'servidor' || tipoSelecionado === 'residente') {
-            labelRegistro.textContent = 'Registro / Vínculo';
-            inputRegistro.placeholder = 'Digite o registro ou vínculo';
-            campoRegistro.style.display = 'block';
-        }
-        // Estagiário: RG + aviso
-        else if (tipoSelecionado === 'estagiario') {
-            labelRegistro.textContent = 'RG';
-            inputRegistro.placeholder = 'Digite o RG';
-            campoRegistro.style.display = 'block';
-            avisoEstagiario.style.display = 'block';
-        }
-        // Terceirizado: RG + Justificativa extra
-        else if (tipoSelecionado === 'tercerizado') {
-            labelRegistro.textContent = 'RG';
-            inputRegistro.placeholder = 'Digite o RG';
-            campoRegistro.style.display = 'block';
-            campoJustificativaExtra.classList.add('ativo');
-        }
-    }
-
-    // Adicionar evento a todos os radios
-    radios.forEach(radio => {
-        radio.addEventListener('change', atualizarCampos);
-    });
-
-    // Executar ao carregar para estado inicial
-    atualizarCampos();
-
-    // ===== BOTÃO ENVIAR (apenas alerta) =====
-    document.getElementById('btnEnviar').addEventListener('click', function(e) {
-        e.preventDefault();
-
-        const tipo = document.querySelector('input[name="tipo"]:checked').value;
-        const nome = document.getElementById('nomeCompleto').value.trim();
-        const registro = document.getElementById('registro').value.trim();
-        const padroes = Array.from(document.getElementById('padraoAcesso').selectedOptions).map(o => o.value);
-        const perfil = document.getElementById('perfilSetor').value;
-        let justificativaExtra = '';
-        if (tipo === 'tercerizado') {
-            justificativaExtra = document.getElementById('justificativaExtra').value.trim();
+            if (tipo === 'servidor' || tipo === 'residente') {
+                labelIdentificacao.textContent = 'Registro / Vínculo';
+                inputIdentificacao.placeholder = 'Digite o registro ou vínculo';
+            } else if (tipo === 'estagiario') {
+                labelIdentificacao.textContent = 'RG';
+                inputIdentificacao.placeholder = 'Digite o RG';
+                avisoIdentificacao.style.display = 'flex';
+            } else if (tipo === 'tercerizado') {
+                labelIdentificacao.textContent = 'RG';
+                inputIdentificacao.placeholder = 'Digite o RG';
+                campoJustificativaExtra.classList.add('visible');
+            }
         }
 
-        // Validação simples
-        if (!nome) {
-            alert('Preencha o Nome Completo.');
-            return;
-        }
-        if (!registro) {
-            alert('Preencha o campo de ' + (tipo === 'estagiario' || tipo === 'tercerizado' ? 'RG' : 'Registro/Vínculo'));
-            return;
-        }
-        if (padroes.length === 0) {
-            alert('Selecione pelo menos um Padrão de Acesso.');
-            return;
-        }
-        if (!perfil) {
-            alert('Selecione um Perfil de Setor.');
-            return;
-        }
+        tipoRadios.forEach(radio => {
+            radio.addEventListener('change', atualizarCampos);
+        });
 
-        // Simulação de envio
-        alert('Chamado criado com sucesso!\n\n' +
-            'Tipo: ' + tipo + '\n' +
-            'Nome: ' + nome + '\n' +
-            (tipo === 'estagiario' || tipo === 'tercerizado' ? 'RG: ' : 'Registro/Vínculo: ') + registro + '\n' +
-            'Padrões: ' + padroes.join(', ') + '\n' +
-            'Perfil: ' + perfil + '\n' +
-            (justificativaExtra ? 'Justificativa: ' + justificativaExtra : ''));
-    });
-</script>
+        // Inicializar com o valor padrão (servidor)
+        atualizarCampos();
+
+        // ===== FUNÇÃO ENVIAR (mock) =====
+        function enviarForm() {
+            const tipo = document.querySelector('input[name="tipo"]:checked').value;
+            const nome = document.getElementById('nomeCompleto').value;
+            const identificacao = document.getElementById('inputIdentificacao').value;
+            const padroes = document.getElementById('padraoAcesso');
+            const padroesSelecionados = Array.from(padroes.selectedOptions).map(opt => opt.value);
+            const justificativa = document.getElementById('justificativa').value;
+            const perfil = document.getElementById('perfilSetor').value;
+
+            // Validação simples
+            if (!nome.trim()) {
+                alert('Preencha o Nome Completo.');
+                return;
+            }
+            if (!identificacao.trim()) {
+                alert('Preencha o campo de identificação.');
+                return;
+            }
+            if (padroesSelecionados.length === 0) {
+                alert('Selecione pelo menos um Padrão de Acesso.');
+                return;
+            }
+            if (!justificativa.trim()) {
+                alert('Preencha a Justificativa.');
+                return;
+            }
+            if (!perfil) {
+                alert('Selecione o Perfil de Setor.');
+                return;
+            }
+
+            // Simula envio
+            alert('Chamado criado com sucesso!\n\n' +
+                'Tipo: ' + tipo + '\n' +
+                'Nome: ' + nome + '\n' +
+                'Identificação: ' + identificacao + '\n' +
+                'Padrões: ' + padroesSelecionados.join(', ') + '\n' +
+                'Justificativa: ' + justificativa + '\n' +
+                'Perfil de Setor: ' + perfil
+            );
+
+            // Opcional: redirecionar para dashboard
+            // window.location.href = '../dashboard.html';
+        }
+    </script>
 
 </body>
 </html>
