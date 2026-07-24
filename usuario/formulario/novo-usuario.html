@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Inclusão de Novo Usuário</title>
+    <title>Inclusão de Novo Usuário - GLPI SIGPEC</title>
     <style>
         /* ===== RESET E BASE ===== */
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -99,36 +99,58 @@
         .form-container {
             background: #FFFFFF;
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 4px;
+            padding: 20px 30px;
             max-width: 700px;
             width: 100%;
             margin: 0 auto;
-            border-radius: 4px;
-            overflow: hidden;
         }
         .form-header {
-            background: #F5F7FC;
-            padding: 10px 20px;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        .form-header h3 {
+        .form-header h2 {
+            font-size: 26px;
+            font-weight: 600;
+            color: #000;
+            margin: 0;
+        }
+        .form-header .icon {
+            width: 40px;
+            height: 40px;
+            background: #D9D9D9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-header .icon svg {
+            width: 30px;
+            height: 30px;
+            fill: #1C1B1F;
+        }
+        .dados-chamado {
+            background: #F5F7FC;
+            border: 1px solid rgba(0,0,0,0.1);
+            padding: 8px 20px;
+            margin: 0 -20px 20px -20px;
             font-size: 16px;
             color: #3B73A7;
             font-weight: 400;
         }
-        .form-body {
-            padding: 20px 25px;
-        }
-        .form-group {
+        .campo {
             margin-bottom: 18px;
         }
-        .form-group label {
+        .campo label {
             display: block;
             font-weight: 600;
             font-size: 13px;
             color: #000;
             margin-bottom: 4px;
         }
-        .form-group label .info-icon {
+        .campo label .info {
             display: inline-block;
             width: 18px;
             height: 18px;
@@ -141,58 +163,59 @@
             margin-left: 4px;
             cursor: default;
         }
-        .radio-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px 25px;
-            margin-top: 4px;
-        }
-        .radio-group label {
-            font-weight: 400;
-            font-size: 13px;
-            color: #000;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .radio-group input[type="radio"] {
-            accent-color: #5B5083;
-            width: 16px;
-            height: 16px;
-        }
-        .form-control {
+        .campo input, .campo select {
             width: 100%;
-            padding: 8px 12px;
+            padding: 6px 10px;
             border: 1px solid #D9DBDE;
             border-radius: 4px;
             font-size: 13px;
-            font-family: 'Inter', sans-serif;
             background: #FFFFFF;
+            height: 30px;
         }
-        .form-control:focus {
-            outline: none;
-            border-color: #3B73A7;
+        .campo select[multiple] {
+            height: auto;
+            min-height: 80px;
+            padding: 4px;
         }
-        select.form-control[multiple] {
-            height: 100px;
-            padding: 6px;
-        }
-        select.form-control[multiple] option {
+        .campo select[multiple] option {
             padding: 4px 8px;
         }
-        .help-text {
-            font-size: 11px;
-            color: #666;
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-top: 4px;
+        }
+        .radio-group label {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
+            font-weight: 400;
+            font-size: 13px;
+            color: #000;
+            cursor: pointer;
         }
-        .help-text .warning {
-            color: #D9534F;
-            font-weight: 600;
+        .radio-group input[type="radio"] {
+            width: auto;
+            height: auto;
+            margin-right: 2px;
         }
-        .btn-enviar {
+        .aviso {
+            background: #FFF3CD;
+            border-left: 4px solid #FFC107;
+            padding: 6px 12px;
+            font-size: 12px;
+            color: #856404;
+            margin-top: 4px;
+            border-radius: 2px;
+        }
+        .campo-extra {
+            display: none;
+        }
+        .campo-extra.ativo {
+            display: block;
+        }
+        .bt-enviar {
             background: #FFFFFF;
             border: 1px solid #D9D9D9;
             border-radius: 4px;
@@ -200,18 +223,22 @@
             font-size: 15px;
             color: #000;
             cursor: pointer;
-            transition: 0.2s;
             margin-top: 10px;
+            transition: 0.2s;
         }
-        .btn-enviar:hover {
+        .bt-enviar:hover {
             background: #f0f0f0;
         }
         /* ===== RESPONSIVO ===== */
         @media (max-width: 768px) {
+            .form-container { padding: 15px; }
+            .dados-chamado { margin: 0 -15px 15px -15px; }
+        }
+        @media (max-width: 480px) {
             .menu-lateral { width: 60px; padding: 20px 10px; }
             .menu-lateral .requisicoes .item span { display: none; }
             .menu-lateral .recolher span { display: none; }
-            .form-body { padding: 15px; }
+            .form-header h2 { font-size: 20px; }
         }
     </style>
 </head>
@@ -220,11 +247,11 @@
 <!-- ===== MENU LATERAL ===== -->
 <div class="menu-lateral">
     <div class="requisicoes">
-        <a href="dashboard.html" class="item">
+        <a href="../dashboard.html" class="item">
             <svg viewBox="0 0 24 24"><path d="M12 1C7.58 1 4 4.58 4 9v3c0 4.42 3.58 8 8 8s8-3.58 8-8v-3c0-4.42-3.58-8-8-8zm0 2c3.31 0 6 2.69 6 6v3c0 3.31-2.69 6-6 6s-6-2.69-6-6v-3c0-3.31 2.69-6 6-6z"/></svg>
             <span>Serviços</span>
         </a>
-        <a href="meus-chamados.html" class="item">
+        <a href="../meus-chamados.html" class="item">
             <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
             <span>Meus Chamados</span>
         </a>
@@ -251,7 +278,8 @@
         <div class="breadcrumb">
             <svg class="home-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
             <span>Home /</span>
-            <span style="color:#000;">Serviços / Inclusão de Novo Usuário</span>
+            <span style="color:#000;">Serviços /</span>
+            <span style="color:#000;">Inclusão de Novo Usuário</span>
         </div>
         <div class="usuario-dropdown">
             <span>Usuário</span>
@@ -262,205 +290,208 @@
     <!-- Formulário -->
     <div class="form-container">
         <div class="form-header">
-            <h3>Dados do Chamado</h3>
+            <h2>Inclusão de Novo Usuário</h2>
+            <div class="icon">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
         </div>
-        <div class="form-body">
-            <form id="formNovoUsuario">
 
-                <!-- Tipo de Usuário -->
-                <div class="form-group">
-                    <label>
-                        Tipo de Usuário *
-                        <span class="info-icon" title="Selecione o tipo de usuário">ⓘ</span>
-                    </label>
-                    <div class="radio-group" id="tipoUsuario">
-                        <label><input type="radio" name="tipo" value="servidor" checked /> Servidor</label>
-                        <label><input type="radio" name="tipo" value="estagiario" /> Estagiário</label>
-                        <label><input type="radio" name="tipo" value="residente" /> Residente</label>
-                        <label><input type="radio" name="tipo" value="tercerizado" /> Terceirizado</label>
-                    </div>
-                </div>
+        <div class="dados-chamado">Dados do Chamado</div>
 
-                <!-- Nome Completo -->
-                <div class="form-group">
-                    <label>Nome Completo</label>
-                    <input type="text" class="form-control" id="nomeCompleto" placeholder="Digite o nome completo" />
-                </div>
-
-                <!-- Registro / Vínculo ou RG (dinâmico) -->
-                <div class="form-group" id="campoRegistro">
-                    <label id="labelRegistro">Registro / Vínculo</label>
-                    <input type="text" class="form-control" id="registro" placeholder="Digite o número de registro" />
-                    <div class="help-text" id="helpRegistro"></div>
-                </div>
-
-                <!-- Padrão de Acesso (múltipla escolha) -->
-                <div class="form-group">
-                    <label>
-                        Padrão de Acesso
-                        <span class="info-icon" title="Selecione um ou mais padrões">ⓘ</span>
-                    </label>
-                    <select class="form-control" id="padraoAcesso" multiple>
-                        <!-- as opções serão inseridas via JavaScript -->
-                    </select>
-                    <div class="help-text">Segure Ctrl (ou Cmd) para selecionar múltiplos.</div>
-                </div>
-
-                <!-- Justificativa (aparece apenas para terceirizado) -->
-                <div class="form-group" id="campoJustificativa" style="display:none;">
-                    <label>Justificativa</label>
-                    <textarea class="form-control" id="justificativa" rows="2" placeholder="Descreva a justificativa"></textarea>
-                </div>
-
-                <!-- Perfil de Setor (único) -->
-                <div class="form-group">
-                    <label>
-                        Perfil de Setor
-                        <span class="info-icon" title="Selecione um perfil">ⓘ</span>
-                    </label>
-                    <select class="form-control" id="perfilSetor">
-                        <!-- opções via JavaScript -->
-                    </select>
-                </div>
-
-                <button type="button" class="btn-enviar" id="btnEnviar">Enviar</button>
-            </form>
+        <!-- Tipo de Usuário -->
+        <div class="campo">
+            <label>Tipo de Usuário * <span class="info">ⓘ</span></label>
+            <div class="radio-group" id="tipoUsuario">
+                <label><input type="radio" name="tipo" value="servidor" checked /> Servidor</label>
+                <label><input type="radio" name="tipo" value="estagiario" /> Estagiário</label>
+                <label><input type="radio" name="tipo" value="residente" /> Residente</label>
+                <label><input type="radio" name="tipo" value="tercerizado" /> Terceirizado</label>
+            </div>
         </div>
+
+        <!-- Nome Completo (sempre visível) -->
+        <div class="campo">
+            <label>Nome Completo <span class="info">ⓘ</span></label>
+            <input type="text" id="nomeCompleto" placeholder="Digite o nome completo" />
+        </div>
+
+        <!-- Campo dinâmico: Registro/Vínculo ou RG -->
+        <div class="campo" id="campoRegistro">
+            <label id="labelRegistro">Registro / Vínculo <span class="info">ⓘ</span></label>
+            <input type="text" id="registro" placeholder="Digite o registro ou vínculo" />
+        </div>
+
+        <!-- Aviso para estagiário (aparece dinamicamente) -->
+        <div class="aviso" id="avisoEstagiario" style="display: none;">
+            ⚠️ Apenas para consultas, sem alterações.
+        </div>
+
+        <!-- Campo extra para Terceirizado: Justificativa -->
+        <div class="campo campo-extra" id="campoJustificativaExtra">
+            <label>Justificativa <span class="info">ⓘ</span></label>
+            <input type="text" id="justificativaExtra" placeholder="Justificativa para terceirizado" />
+        </div>
+
+        <!-- Padrão de Acesso (múltipla seleção) -->
+        <div class="campo">
+            <label>Padrão de Acesso <span class="info">ⓘ</span></label>
+            <select multiple id="padraoAcesso">
+                <!-- As opções serão inseridas via JavaScript -->
+            </select>
+            <small style="color:#666; font-size:11px;">Segure Ctrl (ou Cmd) para selecionar múltiplos</small>
+        </div>
+
+        <!-- Perfil de Setor (única seleção) -->
+        <div class="campo">
+            <label>Perfil de Setor <span class="info">ⓘ</span></label>
+            <select id="perfilSetor">
+                <!-- Opções via JavaScript -->
+            </select>
+        </div>
+
+        <button class="bt-enviar" id="btnEnviar">Enviar</button>
     </div>
 
 </div>
 
 <script>
-    (function() {
-        // ===== DADOS =====
-        const padroes = [
-            'BASICO',
-            'CONSULTA_GERAL',
-            'Ergon',
-            'AHM_PARCELAMEN',
-            'CADASTRO',
-            'DEBITOS',
-            'FOLHA_UNIDADES',
-            'APOS/EXONER',
-            'SEG HOLERITE',
-            'AUX_FUNERAL',
-            'ACESSO_WEB'
-        ];
+    // ===== DADOS =====
+    const padroesAcesso = [
+        'BASICO',
+        'CONSULTA_GERAL',
+        'Ergon',
+        'AHM_PARCELAMEN',
+        'CADASTRO',
+        'DEBITOS',
+        'FOLHA_UNIDADES',
+        'APOS/EXONER',
+        'SEG HOLERITE',
+        'AUX_FUNERAL',
+        'ACESSO_WEB'
+    ];
 
-        const perfis = [
-            'CMSP',
-            'GERAL',
-            'IPREM',
-            'PENSIONISTA',
-            'SFMSP',
-            'TCMSP',
-            'AHM_GERAL',
-            'MUNICIPALIZADOS',
-            'SMS',
-            'IPREM_APOS',
-            'APOS_SME',
-            'SME',
-            'AFASTADOS',
-            'AHM-JSH',
-            'AMLURB'
-        ];
+    const perfisSetor = [
+        'CMSP',
+        'GERAL',
+        'IPREM',
+        'PENSIONISTA',
+        'SFMSP',
+        'TCMSP',
+        'AHM_GERAL',
+        'MUNICIPALIZADOS',
+        'SMS',
+        'IPREM_APOS',
+        'APOS_SME',
+        'SME',
+        'AFASTADOS',
+        'AHM-JSH',
+        'AMLURB'
+    ];
 
-        // ===== REFERÊNCIAS =====
-        const tipoRadios = document.querySelectorAll('input[name="tipo"]');
-        const campoRegistro = document.getElementById('campoRegistro');
-        const labelRegistro = document.getElementById('labelRegistro');
-        const inputRegistro = document.getElementById('registro');
-        const helpRegistro = document.getElementById('helpRegistro');
-        const campoJustificativa = document.getElementById('campoJustificativa');
-        const inputJustificativa = document.getElementById('justificativa');
-        const selectPadrao = document.getElementById('padraoAcesso');
-        const selectPerfil = document.getElementById('perfilSetor');
-        const btnEnviar = document.getElementById('btnEnviar');
+    // ===== POPULAR SELECTS =====
+    const padraoSelect = document.getElementById('padraoAcesso');
+    padroesAcesso.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        padraoSelect.appendChild(opt);
+    });
 
-        // ===== POPULAR SELECTS =====
-        function popularSelect(select, opcoes) {
-            select.innerHTML = '';
-            opcoes.forEach(item => {
-                const opt = document.createElement('option');
-                opt.value = item;
-                opt.textContent = item;
-                select.appendChild(opt);
-            });
+    const perfilSelect = document.getElementById('perfilSetor');
+    perfisSetor.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        perfilSelect.appendChild(opt);
+    });
+
+    // ===== CONTROLE DINÂMICO DOS CAMPOS =====
+    const radios = document.querySelectorAll('input[name="tipo"]');
+    const campoRegistro = document.getElementById('campoRegistro');
+    const labelRegistro = document.getElementById('labelRegistro');
+    const inputRegistro = document.getElementById('registro');
+    const avisoEstagiario = document.getElementById('avisoEstagiario');
+    const campoJustificativaExtra = document.getElementById('campoJustificativaExtra');
+
+    function atualizarCampos() {
+        const tipoSelecionado = document.querySelector('input[name="tipo"]:checked').value;
+
+        // Resetar visibilidade
+        campoRegistro.style.display = 'block';
+        avisoEstagiario.style.display = 'none';
+        campoJustificativaExtra.classList.remove('ativo');
+
+        // Servidor ou Residente: Registro/Vínculo
+        if (tipoSelecionado === 'servidor' || tipoSelecionado === 'residente') {
+            labelRegistro.textContent = 'Registro / Vínculo';
+            inputRegistro.placeholder = 'Digite o registro ou vínculo';
+            campoRegistro.style.display = 'block';
         }
-        popularSelect(selectPadrao, padroes);
-        popularSelect(selectPerfil, perfis);
+        // Estagiário: RG + aviso
+        else if (tipoSelecionado === 'estagiario') {
+            labelRegistro.textContent = 'RG';
+            inputRegistro.placeholder = 'Digite o RG';
+            campoRegistro.style.display = 'block';
+            avisoEstagiario.style.display = 'block';
+        }
+        // Terceirizado: RG + Justificativa extra
+        else if (tipoSelecionado === 'tercerizado') {
+            labelRegistro.textContent = 'RG';
+            inputRegistro.placeholder = 'Digite o RG';
+            campoRegistro.style.display = 'block';
+            campoJustificativaExtra.classList.add('ativo');
+        }
+    }
 
-        // ===== FUNÇÃO PARA ATUALIZAR CAMPOS CONFORME TIPO =====
-        function atualizarCampos() {
-            let tipoSelecionado = null;
-            for (let radio of tipoRadios) {
-                if (radio.checked) {
-                    tipoSelecionado = radio.value;
-                    break;
-                }
-            }
+    // Adicionar evento a todos os radios
+    radios.forEach(radio => {
+        radio.addEventListener('change', atualizarCampos);
+    });
 
-            // Limpa ajuda
-            helpRegistro.innerHTML = '';
-            helpRegistro.style.color = '#666';
+    // Executar ao carregar para estado inicial
+    atualizarCampos();
 
-            // Caso Servidor ou Residente
-            if (tipoSelecionado === 'servidor' || tipoSelecionado === 'residente') {
-                labelRegistro.textContent = 'Registro / Vínculo';
-                inputRegistro.placeholder = 'Digite o número de registro';
-                helpRegistro.textContent = '';
-                // Esconde justificativa
-                campoJustificativa.style.display = 'none';
-                inputJustificativa.value = '';
-            }
-            // Caso Estagiário
-            else if (tipoSelecionado === 'estagiario') {
-                labelRegistro.textContent = 'RG';
-                inputRegistro.placeholder = 'Digite o RG';
-                helpRegistro.innerHTML = '<span class="warning">⚠️</span> Apenas para consultas, sem alterações.';
-                helpRegistro.style.color = '#D9534F';
-                campoJustificativa.style.display = 'none';
-                inputJustificativa.value = '';
-            }
-            // Caso Terceirizado
-            else if (tipoSelecionado === 'tercerizado') {
-                labelRegistro.textContent = 'RG';
-                inputRegistro.placeholder = 'Digite o RG';
-                helpRegistro.textContent = '';
-                campoJustificativa.style.display = 'block';
-            }
+    // ===== BOTÃO ENVIAR (apenas alerta) =====
+    document.getElementById('btnEnviar').addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const tipo = document.querySelector('input[name="tipo"]:checked').value;
+        const nome = document.getElementById('nomeCompleto').value.trim();
+        const registro = document.getElementById('registro').value.trim();
+        const padroes = Array.from(document.getElementById('padraoAcesso').selectedOptions).map(o => o.value);
+        const perfil = document.getElementById('perfilSetor').value;
+        let justificativaExtra = '';
+        if (tipo === 'tercerizado') {
+            justificativaExtra = document.getElementById('justificativaExtra').value.trim();
         }
 
-        // ===== EVENTOS =====
-        tipoRadios.forEach(radio => {
-            radio.addEventListener('change', atualizarCampos);
-        });
+        // Validação simples
+        if (!nome) {
+            alert('Preencha o Nome Completo.');
+            return;
+        }
+        if (!registro) {
+            alert('Preencha o campo de ' + (tipo === 'estagiario' || tipo === 'tercerizado' ? 'RG' : 'Registro/Vínculo'));
+            return;
+        }
+        if (padroes.length === 0) {
+            alert('Selecione pelo menos um Padrão de Acesso.');
+            return;
+        }
+        if (!perfil) {
+            alert('Selecione um Perfil de Setor.');
+            return;
+        }
 
-        // ===== BOTÃO ENVIAR =====
-        btnEnviar.addEventListener('click', function() {
-            const tipo = document.querySelector('input[name="tipo"]:checked');
-            const nome = document.getElementById('nomeCompleto').value.trim();
-            const registro = document.getElementById('registro').value.trim();
-            const padroesSelecionados = Array.from(selectPadrao.selectedOptions).map(opt => opt.value);
-            const perfil = selectPerfil.value;
-            const justificativa = document.getElementById('justificativa').value.trim();
-
-            let mensagem = '=== DADOS DO FORMULÁRIO ===\n';
-            mensagem += `Tipo: ${tipo ? tipo.value : 'não selecionado'}\n`;
-            mensagem += `Nome: ${nome || '(vazio)'}\n`;
-            mensagem += `Registro/RG: ${registro || '(vazio)'}\n`;
-            mensagem += `Padrões: ${padroesSelecionados.length ? padroesSelecionados.join(', ') : 'nenhum'}\n`;
-            mensagem += `Perfil: ${perfil || 'nenhum'}\n`;
-            if (tipo && tipo.value === 'tercerizado') {
-                mensagem += `Justificativa: ${justificativa || '(vazio)'}\n`;
-            }
-            alert(mensagem);
-        });
-
-        // ===== INICIALIZAR =====
-        atualizarCampos();
-
-    })();
+        // Simulação de envio
+        alert('Chamado criado com sucesso!\n\n' +
+            'Tipo: ' + tipo + '\n' +
+            'Nome: ' + nome + '\n' +
+            (tipo === 'estagiario' || tipo === 'tercerizado' ? 'RG: ' : 'Registro/Vínculo: ') + registro + '\n' +
+            'Padrões: ' + padroes.join(', ') + '\n' +
+            'Perfil: ' + perfil + '\n' +
+            (justificativaExtra ? 'Justificativa: ' + justificativaExtra : ''));
+    });
 </script>
 
 </body>
