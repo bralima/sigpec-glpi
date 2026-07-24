@@ -14,7 +14,7 @@
             height: 100vh;
             overflow: hidden;
         }
-        /* ===== MENU LATERAL (mesmo do dashboard) ===== */
+        /* ===== MENU LATERAL ===== */
         .menu-lateral {
             display: flex;
             flex-direction: column;
@@ -95,8 +95,7 @@
             color: #000;
             cursor: pointer;
         }
-
-        /* ===== CATEGORIAS (filtros rápidos) ===== */
+        /* ===== CATEGORIAS ===== */
         .categorias {
             display: flex;
             flex-wrap: wrap;
@@ -125,8 +124,7 @@
         .categoria.validar { background: #6C98D6; }
         .categoria.solucionado { background: #D7D7D7; }
         .categoria.fechado { background: #515151; color: #D9D9D9; }
-
-        /* ===== FILTROS AVANÇADOS (duas linhas) ===== */
+        /* ===== FILTROS AVANÇADOS ===== */
         .filtros {
             background: #FFFFFF;
             border: 1px solid #D9D9D9;
@@ -174,7 +172,6 @@
         .icone-acao { width: 15px; height: 15px; cursor: pointer; }
         .icone-acao.star { fill: #5B5083; }
         .icone-acao.x { fill: #5B5083; }
-
         /* ===== TABELA DE CHAMADOS ===== */
         .tabela-chamados {
             background: #FFFFFF;
@@ -222,6 +219,13 @@
             display: inline-block;
             margin-right: 2px;
         }
+        .seta-entidade {
+            font-size: 8px;
+            color: #000;
+            margin: 0 2px;
+            display: inline-block;
+            transform: scale(0.8);
+        }
         .requerente {
             font-weight: 600;
             color: #736EB9;
@@ -244,7 +248,7 @@
 </head>
 <body>
 
-<!-- Menu Lateral -->
+<!-- ===== MENU LATERAL ===== -->
 <div class="menu-lateral">
     <div class="requisicoes">
         <a href="dashboard.html" class="item">
@@ -271,8 +275,9 @@
     </div>
 </div>
 
-<!-- Conteúdo -->
+<!-- ===== CONTEÚDO ===== -->
 <div class="conteudo">
+
     <!-- Cabeçalho -->
     <div class="cabecalho">
         <div class="breadcrumb">
@@ -297,7 +302,7 @@
         <div class="categoria fechado">0 Fechado</div>
     </div>
 
-    <!-- Filtros avançados (linha de cima e de baixo) -->
+    <!-- Filtros avançados -->
     <div class="filtros">
         <!-- Linha de cima -->
         <div class="linha-cima">
@@ -347,17 +352,21 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Chamado 1 -->
+            <!-- Chamado 1: Inclusão de Usuário (SEGES e COGEP) -->
             <tr>
                 <td class="nome-chamado">Inclusão de Usuário</td>
                 <td>t_72799</td>
                 <td><span class="status-aberto"><span class="circle"></span>Aberto</span></td>
                 <td>25-06-2026 16:43</td>
                 <td>30-06-2026 17:12</td>
-                <td><span class="entidade">SEGES</span> <span class="entidade">COGEP</span></td>
+                <td>
+                    <span class="entidade">SEGES</span>
+                    <span class="seta-entidade">▶</span>
+                    <span class="entidade">COGEP</span>
+                </td>
                 <td class="requerente">Natalia Augusto</td>
             </tr>
-            <!-- Chamado 2 -->
+            <!-- Chamado 2: Inclusão de Novo Padrão (apenas SEGES) -->
             <tr>
                 <td class="nome-chamado">Inclusão de Novo Padrão</td>
                 <td>t_72796</td>
@@ -367,17 +376,21 @@
                 <td><span class="entidade">SEGES</span></td>
                 <td class="requerente">Natalia Augusto</td>
             </tr>
-            <!-- Chamado 3 -->
+            <!-- Chamado 3: Alteração de Setor de Acesso (SEGES e COGEP) -->
             <tr>
                 <td class="nome-chamado">Alteração de Setor de Acesso</td>
                 <td>t_72786</td>
                 <td><span class="status-aberto"><span class="circle"></span>Aberto</span></td>
                 <td>09-06-2026 14:46</td>
                 <td>09-06-2026 14:57</td>
-                <td><span class="entidade">SEGES</span> <span class="entidade">COGEP</span></td>
+                <td>
+                    <span class="entidade">SEGES</span>
+                    <span class="seta-entidade">▶</span>
+                    <span class="entidade">COGEP</span>
+                </td>
                 <td class="requerente">Natalia Augusto</td>
             </tr>
-            <!-- Chamado 4 -->
+            <!-- Chamado 4: Exclusão de Padrão (apenas SEGES) -->
             <tr>
                 <td class="nome-chamado">Exclusão de Padrão</td>
                 <td>t_72779</td>
@@ -387,17 +400,21 @@
                 <td><span class="entidade">SEGES</span></td>
                 <td class="requerente">Natalia Augusto</td>
             </tr>
-            <!-- Chamado 5 -->
+            <!-- Chamado 5: Ativar Acesso (SEGES e COGEP) -->
             <tr>
                 <td class="nome-chamado">Ativar Acesso</td>
                 <td>t_72775</td>
                 <td><span class="status-aberto"><span class="circle"></span>Aberto</span></td>
                 <td>02-06-2026 08:03</td>
                 <td>02-06-2026 08:32</td>
-                <td><span class="entidade">SEGES</span> <span class="entidade">COGEP</span></td>
+                <td>
+                    <span class="entidade">SEGES</span>
+                    <span class="seta-entidade">▶</span>
+                    <span class="entidade">COGEP</span>
+                </td>
                 <td class="requerente">Natalia Augusto</td>
             </tr>
-            <!-- Chamado 6 -->
+            <!-- Chamado 6: Desativar Acesso (apenas SEGES) -->
             <tr>
                 <td class="nome-chamado">Desativar Acesso</td>
                 <td>t_72763</td>
@@ -409,6 +426,7 @@
             </tr>
         </tbody>
     </table>
+
 </div>
 
 </body>
