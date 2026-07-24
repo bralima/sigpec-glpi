@@ -4,10 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - GLPI SIGPEC</title>
-    <!-- Seu CSS exportado do Figma -->
+    <!-- Link para o CSS (que será único) -->
     <link rel="stylesheet" href="css/style.css" />
     <style>
-        /* Pequenos ajustes para garantir o layout centralizado */
+        /* Pequenos ajustes específicos para a página de login */
+        * { box-sizing: border-box; }
         body {
             margin: 0;
             display: flex;
@@ -28,11 +29,10 @@
             background: #F5F7FB;
             box-sizing: border-box;
         }
-        /* Ajuste para o logo (substitua pela sua imagem) */
         .logo-gestao {
             width: 200px;
             height: 81px;
-            background: url('assets/logo.png') no-repeat center / contain;
+            background: url('../assets/logo.png') no-repeat center / contain;
             flex: none;
             order: 0;
             flex-grow: 0;
@@ -68,8 +68,6 @@
         .login-title {
             width: 330px;
             height: 21px;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
             font-weight: 600;
             font-size: 17px;
             line-height: 21px;
@@ -88,71 +86,40 @@
             order: 1;
             flex-grow: 0;
         }
-        .campo-label {
+        .campo-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
             width: 330px;
-            height: 17px;
-            background: #FFFFFF;
             flex: none;
-            order: 1;
             align-self: stretch;
-            flex-grow: 0;
-            position: relative;
         }
-        .campo-label span {
-            position: absolute;
-            left: 0;
-            top: 0;
-            font-family: 'Inter', sans-serif;
+        .campo-wrapper .rotulo {
             font-weight: 400;
             font-size: 12px;
             line-height: 15px;
             color: #000000;
         }
+        .campo-wrapper .rotulo-senha {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .campo-wrapper .rotulo-senha .esqueceu {
+            font-size: 11px;
+            color: #3B73A7;
+            cursor: pointer;
+        }
         .campo-input {
             box-sizing: border-box;
-            width: 330px;
+            width: 100%;
             height: 35px;
             background: #FFFFFF;
             border: 1px solid #D9DBDE;
             border-radius: 2px;
-            flex: none;
-            order: 2;
-            align-self: stretch;
-            flex-grow: 0;
             padding: 0 8px;
             font-family: 'Inter', sans-serif;
             font-size: 12px;
-        }
-        .campo-senha {
-            width: 330px;
-            height: 13.39px;
-            background: #FFFFFF;
-            flex: none;
-            order: 3;
-            align-self: stretch;
-            flex-grow: 0;
-            position: relative;
-        }
-        .campo-senha .esqueceu {
-            position: absolute;
-            right: 0;
-            top: 0;
-            font-family: 'Inter', sans-serif;
-            font-weight: 400;
-            font-size: 11px;
-            line-height: 13px;
-            color: #3B73A7;
-            cursor: pointer;
-        }
-        .campo-senha .senha-label {
-            position: absolute;
-            left: 0;
-            top: 0;
-            font-family: 'Inter', sans-serif;
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 15px;
-            color: #000000;
         }
         .check-lembre {
             display: flex;
@@ -177,8 +144,6 @@
             accent-color: #1C1B1F;
         }
         .check-lembre label {
-            font-family: 'Inter', sans-serif;
-            font-weight: 400;
             font-size: 12px;
             line-height: 15px;
             color: #000000;
@@ -196,12 +161,11 @@
             align-self: stretch;
             flex-grow: 0;
             border: none;
-            font-family: 'Inter', sans-serif;
-            font-weight: 400;
             font-size: 15px;
             line-height: 18px;
             color: #000000;
             cursor: pointer;
+            transition: background 0.2s;
         }
         .bt-iniciar:hover {
             background: #b0d4e8;
@@ -209,8 +173,6 @@
         .footer-copy {
             width: 284px;
             height: 12px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 400;
             font-size: 11px;
             line-height: 13px;
             color: #3B73A7;
@@ -233,23 +195,28 @@
             <div class="line-separator"></div>
         </div>
 
-        <!-- Campos de login -->
-        <div class="campo-label">
-            <span>Nome de utilizador</span>
+        <!-- Campo Nome de utilizador -->
+        <div class="campo-wrapper">
+            <span class="rotulo">Nome de utilizador</span>
+            <input class="campo-input" type="text" id="username" placeholder="Digite seu usuário" />
         </div>
-        <input class="campo-input" type="text" id="username" placeholder="Digite seu usuário" />
 
-        <div class="campo-senha">
-            <span class="senha-label">Palavra-passe</span>
-            <span class="esqueceu">Esqueceu-se da palavra-passe?</span>
+        <!-- Campo Palavra-passe -->
+        <div class="campo-wrapper">
+            <div class="rotulo rotulo-senha">
+                <span>Palavra-passe</span>
+                <span class="esqueceu">Esqueceu-se da palavra-passe?</span>
+            </div>
+            <input class="campo-input" type="password" id="password" placeholder="Digite sua senha" />
         </div>
-        <input class="campo-input" type="password" id="password" placeholder="Digite sua senha" />
 
+        <!-- Checkbox Lembre-me -->
         <div class="check-lembre">
             <input type="checkbox" id="remember" />
             <label for="remember">Lembre-me</label>
         </div>
 
+        <!-- Botão -->
         <button class="bt-iniciar" id="btnLogin">Iniciar sessão</button>
     </div>
 
@@ -258,10 +225,20 @@
 
 <script>
     document.getElementById('btnLogin').addEventListener('click', function() {
-        // Simulação de login: redireciona para o painel do usuário
-        // Em uma apresentação, pode-se também verificar se user=admin e senha=admin
-        // Mas aqui vamos direto para a página do usuário.
-        window.location.href = 'usuario.html';
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        // Credenciais definidas
+        const isUsuario = (username === 'd123456' && password === 'brasil2026');
+        const isTecnico = (username === 'd225566' && password === 'sigpec00');
+
+        if (isUsuario) {
+            window.location.href = 'usuario/dashboard.html';
+        } else if (isTecnico) {
+            window.location.href = 'tecnico/dashboard.html';
+        } else {
+            alert('Usuário ou senha inválidos!');
+        }
     });
 </script>
 
