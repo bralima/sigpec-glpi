@@ -143,8 +143,7 @@
             font-size: 13px;
             color: #000;
         }
-        .form-card .campo input,
-        .form-card .campo select {
+        .form-card .campo input {
             width: 100%;
             padding: 8px 10px;
             border: 1px solid #D9DBDE;
@@ -152,19 +151,6 @@
             font-size: 13px;
             font-family: 'Inter', sans-serif;
             background: #FFFFFF;
-        }
-        .form-card .campo .aviso {
-            font-size: 11px;
-            color: #d32f2f;
-            margin-top: 2px;
-        }
-        .form-card .campo .helper {
-            font-size: 11px;
-            color: #666;
-            margin-top: 2px;
-        }
-        .form-card .campo .helper .icone-aviso {
-            color: #f57c00;
         }
         .form-card .campo-radio {
             display: flex;
@@ -206,9 +192,6 @@
         }
         .btn-enviar:hover {
             background: #f0f0f0;
-        }
-        .campo-identificacao {
-            transition: all 0.2s;
         }
 
         /* ===== RESPONSIVO ===== */
@@ -290,23 +273,10 @@
                 <input type="text" id="nome" placeholder="Digite o nome completo" />
             </div>
 
-            <!-- Campo de identificação (dinâmico) -->
-            <div class="campo campo-identificacao" id="campoIdentificacao">
-                <label for="identificacao" id="labelIdentificacao">Registro / Vínculo</label>
-                <input type="text" id="identificacao" placeholder="Digite o registro ou vínculo" />
-                <div class="helper" id="helperIdentificacao"></div>
-            </div>
-
             <!-- Login de Usuário -->
             <div class="campo">
                 <label for="login">Login de Usuário</label>
                 <input type="text" id="login" placeholder="Digite o login" />
-            </div>
-
-            <!-- Justificativa (fixo) -->
-            <div class="campo">
-                <label for="justificativa">Justificativa</label>
-                <input type="text" id="justificativa" placeholder="Digite a justificativa" />
             </div>
 
             <!-- Botão Enviar -->
@@ -318,64 +288,18 @@
 </div>
 
 <script>
-    // ===== ELEMENTOS =====
-    const radios = document.querySelectorAll('input[name="tipo"]');
-    const campoIdentificacao = document.getElementById('campoIdentificacao');
-    const labelIdentificacao = document.getElementById('labelIdentificacao');
-    const inputIdentificacao = document.getElementById('identificacao');
-    const helperIdentificacao = document.getElementById('helperIdentificacao');
-
-    // ===== FUNÇÃO PARA ATUALIZAR O CAMPO DE IDENTIFICAÇÃO =====
-    function atualizarIdentificacao(tipo) {
-        // Reseta avisos
-        helperIdentificacao.innerHTML = '';
-        inputIdentificacao.value = '';
-        inputIdentificacao.placeholder = 'Digite...';
-
-        // Define o rótulo e o placeholder conforme o tipo
-        if (tipo === 'Servidor' || tipo === 'Residente') {
-            labelIdentificacao.textContent = 'Registro / Vínculo';
-            inputIdentificacao.placeholder = 'Digite o registro ou vínculo';
-            helperIdentificacao.innerHTML = '';
-        } else if (tipo === 'Estagiario') {
-            labelIdentificacao.textContent = 'RG';
-            inputIdentificacao.placeholder = 'Digite o RG';
-            helperIdentificacao.innerHTML = '<span class="icone-aviso">⚠️</span> Apenas para consultas, sem alterações.';
-        } else if (tipo === 'Terceirizado') {
-            labelIdentificacao.textContent = 'RG';
-            inputIdentificacao.placeholder = 'Digite o RG';
-            // Para terceirizado, a justificativa já existe abaixo, então só RG
-            helperIdentificacao.innerHTML = '';
-        }
-    }
-
-    // ===== EVENTO: QUANDO UM RADIO É SELECIONADO =====
-    radios.forEach(radio => {
-        radio.addEventListener('change', function() {
-            if (this.checked) {
-                atualizarIdentificacao(this.value);
-            }
-        });
-    });
-
-    // ===== INICIALIZA COM O PRIMEIRO SELECIONADO (Servidor) =====
-    const inicial = document.querySelector('input[name="tipo"]:checked');
-    if (inicial) atualizarIdentificacao(inicial.value);
-
     // ===== EVENTO DE ENVIO =====
     document.getElementById('btnEnviar').addEventListener('click', function(e) {
         e.preventDefault();
         const tipo = document.querySelector('input[name="tipo"]:checked').value;
         const nome = document.getElementById('nome').value.trim();
-        const identificacao = document.getElementById('identificacao').value.trim();
         const login = document.getElementById('login').value.trim();
-        const justificativa = document.getElementById('justificativa').value.trim();
 
-        if (!nome || !identificacao || !login || !justificativa) {
+        if (!nome || !login) {
             alert('Por favor, preencha todos os campos.');
             return;
         }
-        alert(`Chamado de desativação enviado com sucesso!\n\nTipo: ${tipo}\nNome: ${nome}\nIdentificação: ${identificacao}\nLogin: ${login}\nJustificativa: ${justificativa}`);
+        alert(`Chamado de desativação enviado com sucesso!\n\nTipo: ${tipo}\nNome: ${nome}\nLogin: ${login}`);
         // Você pode redirecionar ou limpar o formulário aqui
     });
 </script>
