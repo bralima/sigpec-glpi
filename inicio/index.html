@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GLPI - Técnico</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F5F7FB;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #D9DBDE;
+        }
+        .header h1 {
+            font-size: 24px;
+            color: #005BAC;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-info span {
+            font-weight: 500;
+        }
+        .btn-sair {
+            background: #E74C3C;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-sair:hover {
+            background: #C0392B;
+        }
+        .filtros {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .filtros input, .filtros select {
+            padding: 8px 12px;
+            border: 1px solid #D9DBDE;
+            border-radius: 4px;
+            font-size: 14px;
+            flex: 1 1 200px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: #E9ECEF;
+            text-align: left;
+            padding: 12px 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #F0F0F0;
+        }
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .badge-novo { background: #0D6EFD; color: white; }
+        .badge-andamento { background: #FFC107; color: #212529; }
+        .badge-pendente { background: #FD7E14; color: white; }
+        .badge-resolvido { background: #28A745; color: white; }
+        .badge-fechado { background: #6C757D; color: white; }
+        .btn-detalhe {
+            background: #005BAC;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .btn-detalhe:hover {
+            background: #004080;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #6C757D;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Cabeçalho -->
+    <div class="header">
+        <h1>📋 GLPI - Painel do Técnico</h1>
+        <div class="user-info">
+            <span>👤 Técnico: d225566</span>
+            <button class="btn-sair" onclick="window.location.href='../index.html'">Sair</button>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros">
+        <input type="text" id="busca" placeholder="🔍 Buscar por título ou solicitante..." />
+        <select id="filtro-status">
+            <option value="">Todos os status</option>
+            <option value="Aberto">Aberto</option>
+            <option value="Em andamento">Em andamento</option>
+            <option value="Pendente">Pendente</option>
+            <option value="Resolvido">Resolvido</option>
+        </select>
+        <select id="filtro-prioridade">
+            <option value="">Todas as prioridades</option>
+            <option value="Baixa">Baixa</option>
+            <option value="Média">Média</option>
+            <option value="Alta">Alta</option>
+            <option value="Urgente">Urgente</option>
+        </select>
+    </div>
+
+    <!-- Tabela -->
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Status</th>
+                <th>Prioridade</th>
+                <th>Solicitante</th>
+                <th>Data</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="corpo-tabela">
+            <!-- Preenchido via JS -->
+        </tbody>
+    </table>
+
+    <div class="footer">
+        GLPI Cpyright (C) 2015-2023 Teclib’ and contributors
+    </div>
+</div>
+
+<script>
+    // Mock de dados (simulação)
+    let chamados = [
+        { id: 1, titulo: "Impressora não imprime", status: "Aberto", prioridade: "Alta", solicitante: "João Silva", data: "2026-07-29" },
+        { id: 2, titulo: "Troca de senha", status: "Em andamento", prioridade: "Média", solicitante: "Maria Souza", data: "2026-07-28" },
+        { id: 3, titulo: "Falta espaço em disco", status: "Pendente", prioridade: "Baixa", solicitante: "Carlos Pereira", data: "2026-07-27" },
+        { id: 4, titulo: "Email não sincroniza", status: "Resolvido", prioridade: "Urgente", solicitante: "Ana Oliveira", data: "2026-07-26" },
+        { id: 5, titulo: "Atualizar antivírus", status: "Aberto", prioridade: "Média", solicitante: "Pedro Santos", data: "2026-07-25" }
+    ];
+
+    // Função para renderizar a tabela
+    function renderizar(lista) {
+        const tbody = document.getElementById('corpo-tabela');
+        if (lista.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px;">Nenhum chamado encontrado</td></tr>`;
+            return;
+        }
+        tbody.innerHTML = lista.map(c => {
+            // Define a classe do badge conforme status
+            let badgeClass = '';
+            switch(c.status) {
+                case 'Aberto': badgeClass = 'badge-novo'; break;
+                case 'Em andamento': badgeClass = 'badge-andamento'; break;
+                case 'Pendente': badgeClass = 'badge-pendente'; break;
+                case 'Resolvido': badgeClass = 'badge-resolvido'; break;
+                default: badgeClass = 'badge-fechado';
+            }
+            return `
+                <tr>
+                    <td>#${c.id}</td>
+                    <td>${c.titulo}</td>
+                    <td><span class="badge ${badgeClass}">${c.status}</span></td>
+                    <td>${c.prioridade}</td>
+                    <td>${c.solicitante}</td>
+                    <td>${c.data}</td>
+                    <td><button class="btn-detalhe" onclick="detalhar(${c.id})">Detalhar</button></td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // Função para filtrar
+    function filtrar() {
+        const busca = document.getElementById('busca').value.toLowerCase();
+        const status = document.getElementById('filtro-status').value;
+        const prioridade = document.getElementById('filtro-prioridade').value;
+
+        const filtrados = chamados.filter(c => {
+            const matchBusca = c.titulo.toLowerCase().includes(busca) || c.solicitante.toLowerCase().includes(busca);
+            const matchStatus = status === '' || c.status === status;
+            const matchPrioridade = prioridade === '' || c.prioridade === prioridade;
+            return matchBusca && matchStatus && matchPrioridade;
+        });
+        renderizar(filtrados);
+    }
+
+    // Ação de detalhar (simulação)
+    function detalhar(id) {
+        const chamado = chamados.find(c => c.id === id);
+        if (chamado) {
+            alert(`Detalhes do chamado #${chamado.id}:\nTítulo: ${chamado.titulo}\nStatus: ${chamado.status}\nPrioridade: ${chamado.prioridade}\nSolicitante: ${chamado.solicitante}\nData: ${chamado.data}`);
+        }
+    }
+
+    // Eventos de filtro
+    document.getElementById('busca').addEventListener('input', filtrar);
+    document.getElementById('filtro-status').addEventListener('change', filtrar);
+    document.getElementById('filtro-prioridade').addEventListener('change', filtrar);
+
+    // Inicializa com todos
+    renderizar(chamados);
+</script>
+</body>
+</html>
