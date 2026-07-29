@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel do Técnico - GLPI SIGPEC</title>
+    <style>
+        /* ===== RESET E BASE ===== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F5F7FB;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        /* ===== MENU LATERAL ===== */
+        .menu-lateral {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 34px 10px;
+            gap: 652px;
+            width: 162px;
+            height: 100vh;
+            background: #1A397A;
+            flex-shrink: 0;
+            overflow-y: auto;
+        }
+        .menu-lateral .requisicoes {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            width: 100%;
+        }
+        .menu-lateral .categoria {
+            width: 100%;
+            color: #FFFFFF;
+            font-size: 13px;
+            line-height: 16px;
+            cursor: pointer;
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 400;
+        }
+        .menu-lateral .categoria .icone {
+            width: 18px;
+            height: 18px;
+            fill: #FFFFFF;
+            flex-shrink: 0;
+        }
+        .menu-lateral .categoria .seta {
+            margin-left: auto;
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+        .menu-lateral .categoria .seta.aberta {
+            transform: rotate(90deg);
+        }
+        .menu-lateral .subitens {
+            display: none;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 26px;
+            gap: 4px;
+            width: 100%;
+            margin-bottom: 4px;
+        }
+        .menu-lateral .subitens.aberto {
+            display: flex;
+        }
+        .menu-lateral .subitens .subitem {
+            color: #FFFFFF;
+            font-size: 12px;
+            line-height: 14px;
+            text-decoration: none;
+            padding: 3px 0;
+            width: 100%;
+            transition: 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .menu-lateral .subitens .subitem:hover {
+            background: rgba(255,255,255,0.1);
+            padding-left: 4px;
+        }
+        .menu-lateral .recolher {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #FFFFFF;
+            font-size: 14px;
+            line-height: 17px;
+            cursor: pointer;
+            width: 100%;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        /* ===== CONTEÚDO ===== */
+        .conteudo {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 20px 20px 20px;
+            overflow-y: auto;
+            height: 100vh;
+        }
+        .cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 12px 13px;
+            background: #FFFFFF;
+            width: 100%;
+            flex-shrink: 0;
+            margin-bottom: 20px;
+        }
+        .cabecalho .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #000;
+        }
+        .cabecalho .breadcrumb .home-icon { width: 18px; height: 18px; }
+        .cabecalho .usuario-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: #000;
+            cursor: pointer;
+        }
+        /* ===== VISÃO GERAL ===== */
+        .visao-geral {
+            background: #FFFFFF;
+            border: 1px solid #D9D9D9;
+            padding: 16px;
+            border-radius: 4px;
+        }
+        .visao-geral .filtros-visao {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+        .visao-geral .filtros-visao .botao-visao {
+            background: #FAFBFC;
+            border: 1px solid #D9D9D9;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #515151;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        .visao-geral .filtros-visao .botao-visao.ativo {
+            background: #1A397A;
+            color: #FFFFFF;
+            border-color: #1A397A;
+        }
+        .visao-geral .tabela-visao {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .visao-geral .tabela-visao th {
+            background: #F2F3F4;
+            text-align: left;
+            padding: 6px 10px;
+            font-weight: 600;
+            color: #000;
+            border-bottom: 1px solid #D9D9D9;
+        }
+        .visao-geral .tabela-visao td {
+            padding: 6px 10px;
+            border-bottom: 1px solid #eee;
+            color: #000;
+        }
+        .visao-geral .tabela-visao tr:nth-child(even) {
+            background: #FFFFFF;
+        }
+        .visao-geral .tabela-visao tr:nth-child(odd) {
+            background: #F9FAFB;
+        }
+        .visao-geral .tabela-visao .id-chamado {
+            font-weight: 400;
+        }
+        .visao-geral .tabela-visao .requerente {
+            font-weight: 400;
+        }
+        .visao-geral .tabela-visao .elemento {
+            font-weight: 400;
+        }
+        .visao-geral .tabela-visao .descricao {
+            font-weight: 400;
+        }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 480px) {
+            .menu-lateral { width: 60px; padding: 20px 10px; }
+            .menu-lateral .requisicoes .categoria span { display: none; }
+            .menu-lateral .subitens { padding-left: 10px; }
+            .menu-lateral .subitens .subitem span { display: none; }
+            .menu-lateral .recolher span { display: none; }
+            .menu-lateral .categoria .seta { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== MENU LATERAL ===== -->
+<div class="menu-lateral">
+    <div class="requisicoes">
+        <!-- Assistência -->
+        <div class="categoria" data-target="sub-assistencia">
+            <svg class="icone" viewBox="0 0 24 24"><path d="M12 1C7.58 1 4 4.58 4 9v3c0 4.42 3.58 8 8 8s8-3.58 8-8v-3c0-4.42-3.58-8-8-8zm0 2c3.31 0 6 2.69 6 6v3c0 3.31-2.69 6-6 6s-6-2.69-6-6v-3c0-3.31 2.69-6 6-6z"/></svg>
+            <span>Assistência</span>
+            <span class="seta">▶</span>
+        </div>
+        <div class="subitens" id="sub-assistencia">
+            <a href="#" class="subitem"><span>Chamados</span></a>
+            <a href="#" class="subitem"><span>Criar Chamado</span></a>
+            <a href="#" class="subitem"><span>Problemas</span></a>
+        </div>
+
+        <!-- Gerência -->
+        <div class="categoria" data-target="sub-gerencia">
+            <svg class="icone" viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
+            <span>Gerência</span>
+            <span class="seta">▶</span>
+        </div>
+        <div class="subitens" id="sub-gerencia">
+            <a href="#" class="subitem"><span>Padrão de Acesso</span></a>
+            <a href="#" class="subitem"><span>Perfil de Setor</span></a>
+            <a href="#" class="subitem"><span>Documentos</span></a>
+            <a href="#" class="subitem"><span>Domínios</span></a>
+        </div>
+
+        <!-- Administração -->
+        <div class="categoria" data-target="sub-administracao">
+            <svg class="icone" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c4.41 0 8 3.59 8 8s-3.59 8-8 8-8-3.59-8-8 3.59-8 8-8zm-1 12h2v-2h-2v2zm0-4h2V7h-2v5z"/></svg>
+            <span>Administração</span>
+            <span class="seta">▶</span>
+        </div>
+        <div class="subitens" id="sub-administracao">
+            <a href="#" class="subitem"><span>Usuários</span></a>
+            <a href="#" class="subitem"><span>Grupos</span></a>
+            <a href="#" class="subitem"><span>Entidades</span></a>
+            <a href="#" class="subitem"><span>Regras</span></a>
+            <a href="#" class="subitem"><span>Formulários</span></a>
+        </div>
+    </div>
+
+    <div class="recolher">
+        <svg viewBox="0 0 24 24" width="24" height="24"><path d="M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"/></svg>
+        <span>Recolher Menu</span>
+    </div>
+</div>
+
+<!-- ===== CONTEÚDO ===== -->
+<div class="conteudo">
+
+    <!-- Cabeçalho -->
+    <div class="cabecalho">
+        <div class="breadcrumb">
+            <svg class="home-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>Home /</span>
+            <span style="color:#000;">Painel do Técnico</span>
+        </div>
+        <div class="usuario-dropdown">
+            <span>Técnico</span>
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 10l5 5 5-5z"/></svg>
+        </div>
+    </div>
+
+    <!-- Visão Geral -->
+    <div class="visao-geral">
+        <!-- Filtros de visão -->
+        <div class="filtros-visao">
+            <span class="botao-visao ativo">Visão Pessoal</span>
+            <span class="botao-visao">Visão do Grupo</span>
+            <span class="botao-visao">Visão Global</span>
+            <span class="botao-visao">Feed RSS</span>
+            <span class="botao-visao">Formulários</span>
+            <span class="botao-visao">Todos</span>
+        </div>
+
+        <!-- Tabela -->
+        <table class="tabela-visao">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>REQUERENTE</th>
+                    <th>ELEMENTOS ASSOCIADOS</th>
+                    <th>DESCRIÇÃO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="id-chamado">t_9595</td>
+                    <td class="requerente">Natalia Augusto</td>
+                    <td class="elemento">SMS</td>
+                    <td class="descricao">Inserir Novo Padrão</td>
+                </tr>
+                <tr>
+                    <td class="id-chamado">t_4545</td>
+                    <td class="requerente">Natalia Augusto</td>
+                    <td class="elemento">Geral</td>
+                    <td class="descricao">Desativar Usuário</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // ===== FUNÇÃO PARA ALTERNAR SUBITENS =====
+    document.querySelectorAll('.categoria').forEach(categoria => {
+        categoria.addEventListener('click', function(e) {
+            const targetId = this.dataset.target;
+            const subitens = document.getElementById(targetId);
+            if (subitens) {
+                // Alterna a classe 'aberto' no subitens
+                subitens.classList.toggle('aberto');
+                // Alterna a seta
+                const seta = this.querySelector('.seta');
+                if (seta) {
+                    seta.classList.toggle('aberta');
+                }
+            }
+        });
+    });
+
+    // ===== FUNÇÃO PARA OS BOTÕES DE VISÃO (APENAS VISUAL) =====
+    document.querySelectorAll('.botao-visao').forEach(botao => {
+        botao.addEventListener('click', function() {
+            document.querySelectorAll('.botao-visao').forEach(b => b.classList.remove('ativo'));
+            this.classList.add('ativo');
+        });
+    });
+</script>
+
+</body>
+</html>
