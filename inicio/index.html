@@ -3,238 +3,443 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GLPI - Técnico</title>
+    <title>Painel do Técnico - GLPI SIGPEC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ============================================================
+           CSS – Painel do Técnico (estilo CLIC)
+           ============================================================ */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Open Sans', 'Inter', sans-serif;
             background: #F5F7FB;
-            padding: 20px;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: #FFFFFF;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+        /* ===== MENU LATERAL ===== */
+        .menu-lateral {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 28px 14px 20px;
+            width: 220px;
+            height: 100vh;
+            background: #1A397A; /* azul escuro institucional */
+            flex-shrink: 0;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.08);
         }
-        .header {
+
+        .menu-lateral .requisicoes {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .menu-lateral .categoria {
+            width: 100%;
+            color: #FFFFFF;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        .menu-lateral .categoria:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        .menu-lateral .categoria .icone {
+            width: 20px;
+            height: 20px;
+            fill: #FFFFFF;
+            flex-shrink: 0;
+        }
+
+        .menu-lateral .categoria .seta {
+            margin-left: auto;
+            transition: transform 0.25s ease;
+            font-size: 0.8rem;
+            color: #b0c4de;
+        }
+        .menu-lateral .categoria .seta.aberta {
+            transform: rotate(90deg);
+        }
+
+        .menu-lateral .subitens {
+            display: none;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 28px;
+            gap: 2px;
+            width: 100%;
+            margin-bottom: 4px;
+        }
+        .menu-lateral .subitens.aberto {
+            display: flex;
+        }
+
+        .menu-lateral .subitens .subitem {
+            color: #d0ddf0;
+            font-size: 0.85rem;
+            font-weight: 400;
+            text-decoration: none;
+            padding: 4px 6px;
+            width: 100%;
+            border-radius: 4px;
+            transition: background 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .menu-lateral .subitens .subitem:hover {
+            background: rgba(255,255,255,0.12);
+            color: #FFFFFF;
+        }
+
+        .menu-lateral .recolher {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #b0c4de;
+            font-size: 0.9rem;
+            cursor: pointer;
+            width: 100%;
+            padding: 12px 0 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            transition: color 0.2s;
+        }
+        .menu-lateral .recolher:hover {
+            color: #FFFFFF;
+        }
+
+        /* ===== CONTEÚDO ===== */
+        .conteudo {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 24px 24px;
+            overflow-y: auto;
+            height: 100vh;
+            background: #F5F7FB;
+        }
+
+        /* Cabeçalho */
+        .cabecalho {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #D9DBDE;
+            padding: 12px 18px;
+            background: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 24px;
+            flex-shrink: 0;
         }
-        .header h1 {
-            font-size: 24px;
-            color: #005BAC;
-        }
-        .user-info {
+
+        .cabecalho .breadcrumb {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 6px;
+            font-size: 0.9rem;
+            color: #5a6a7e;
         }
-        .user-info span {
-            font-weight: 500;
+        .cabecalho .breadcrumb .home-icon {
+            width: 18px;
+            height: 18px;
+            fill: #325FAA;
         }
-        .btn-sair {
-            background: #E74C3C;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
+        .cabecalho .breadcrumb span:last-child {
+            color: #1A1A1A;
+            font-weight: 600;
         }
-        .btn-sair:hover {
-            background: #C0392B;
-        }
-        .filtros {
+
+        .cabecalho .usuario-dropdown {
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            color: #1A1A1A;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 30px;
+            transition: background 0.15s;
+        }
+        .cabecalho .usuario-dropdown:hover {
+            background: #f0f2f5;
+        }
+
+        /* Visão Geral (card) */
+        .visao-geral {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #EBEEF2;
+        }
+
+        .visao-geral .filtros-visao {
+            display: flex;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 18px;
+            align-items: center;
         }
-        .filtros input, .filtros select {
-            padding: 8px 12px;
+
+        .visao-geral .filtros-visao .botao-visao {
+            background: #FAFBFC;
             border: 1px solid #D9DBDE;
-            border-radius: 4px;
-            font-size: 14px;
-            flex: 1 1 200px;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #515151;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.15s;
         }
-        table {
+        .visao-geral .filtros-visao .botao-visao:hover {
+            background: #eef1f5;
+        }
+        .visao-geral .filtros-visao .botao-visao.ativo {
+            background: #325FAA;
+            color: #FFFFFF;
+            border-color: #325FAA;
+            box-shadow: 0 2px 6px rgba(50,95,170,0.25);
+        }
+
+        /* Tabela */
+        .visao-geral .tabela-visao {
             width: 100%;
             border-collapse: collapse;
+            font-size: 0.85rem;
         }
-        th {
-            background: #E9ECEF;
+        .visao-geral .tabela-visao th {
+            background: #F2F4F8;
             text-align: left;
-            padding: 12px 8px;
+            padding: 10px 12px;
             font-weight: 600;
-            color: #333;
+            color: #1A1A1A;
+            border-bottom: 2px solid #D9DBDE;
+            border-radius: 6px 6px 0 0;
         }
-        td {
-            padding: 10px 8px;
-            border-bottom: 1px solid #F0F0F0;
+        .visao-geral .tabela-visao td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #EBEEF2;
+            color: #1A1A1A;
         }
-        .badge {
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
+        .visao-geral .tabela-visao tr:last-child td {
+            border-bottom: none;
+        }
+        .visao-geral .tabela-visao tr:nth-child(even) {
+            background: #F8FAFC;
+        }
+        .visao-geral .tabela-visao tr:hover {
+            background: #EFF2F7;
+        }
+
+        .visao-geral .tabela-visao .id-chamado {
             font-weight: 600;
-            display: inline-block;
+            color: #325FAA;
         }
-        .badge-novo { background: #0D6EFD; color: white; }
-        .badge-andamento { background: #FFC107; color: #212529; }
-        .badge-pendente { background: #FD7E14; color: white; }
-        .badge-resolvido { background: #28A745; color: white; }
-        .badge-fechado { background: #6C757D; color: white; }
-        .btn-detalhe {
-            background: #005BAC;
-            color: white;
-            border: none;
-            padding: 4px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 13px;
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 768px) {
+            .menu-lateral {
+                width: 70px;
+                padding: 20px 10px;
+            }
+            .menu-lateral .categoria span:not(.seta) {
+                display: none;
+            }
+            .menu-lateral .subitens {
+                padding-left: 8px;
+            }
+            .menu-lateral .subitens .subitem span {
+                display: none;
+            }
+            .menu-lateral .recolher span {
+                display: none;
+            }
+            .menu-lateral .categoria .seta {
+                display: none;
+            }
+            .conteudo {
+                padding: 16px;
+            }
+            .cabecalho {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .visao-geral {
+                padding: 16px;
+            }
+            .visao-geral .tabela-visao {
+                font-size: 0.75rem;
+            }
+            .visao-geral .tabela-visao th,
+            .visao-geral .tabela-visao td {
+                padding: 6px 8px;
+            }
         }
-        .btn-detalhe:hover {
-            background: #004080;
-        }
-        .footer {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 12px;
-            color: #6C757D;
+
+        @media (max-width: 480px) {
+            .menu-lateral {
+                width: 56px;
+                padding: 16px 6px;
+            }
+            .menu-lateral .categoria {
+                padding: 6px 4px;
+            }
+            .menu-lateral .categoria .icone {
+                width: 18px;
+                height: 18px;
+            }
+            .visao-geral .filtros-visao .botao-visao {
+                font-size: 0.7rem;
+                padding: 4px 12px;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- Cabeçalho -->
-    <div class="header">
-        <h1>📋 GLPI - Painel do Técnico</h1>
-        <div class="user-info">
-            <span>👤 Técnico: d225566</span>
-            <button class="btn-sair" onclick="window.location.href='../index.html'">Sair</button>
+
+<!-- ===== MENU LATERAL ===== -->
+<div class="menu-lateral">
+    <div class="requisicoes">
+        <!-- Assistência -->
+        <div class="categoria" data-target="sub-assistencia">
+            <svg class="icone" viewBox="0 0 24 24"><path d="M12 1C7.58 1 4 4.58 4 9v3c0 4.42 3.58 8 8 8s8-3.58 8-8v-3c0-4.42-3.58-8-8-8zm0 2c3.31 0 6 2.69 6 6v3c0 3.31-2.69 6-6 6s-6-2.69-6-6v-3c0-3.31 2.69-6 6-6z"/></svg>
+            <span>Assistência</span>
+            <span class="seta">▶</span>
+        </div>
+        <div class="subitens" id="sub-assistencia">
+            <a href="#" class="subitem"><span>Chamados</span></a>
+            <a href="#" class="subitem"><span>Criar Chamado</span></a>
+        </div>
+
+        <!-- Gerência -->
+        <div class="categoria" data-target="sub-gerencia">
+            <svg class="icone" viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
+            <span>Gerência</span>
+            <span class="seta">▶</span>
+        </div>
+        <div class="subitens" id="sub-gerencia">
+            <a href="#" class="subitem"><span>Padrão de Acesso</span></a>
+            <a href="#" class="subitem"><span>Perfil de Setor</span></a>
+            <a href="#" class="subitem"><span>Documentos</span></a>
+        </div>
+
+        <!-- Administração -->
+        <div class="categoria" data-target="sub-administracao">
+            <svg class="icone" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c4.41 0 8 3.59 8 8s-3.59 8-8 8-8-3.59-8-8 3.59-8 8-8zm-1 12h2v-2h-2v2zm0-4h2V7h-2v5z"/></svg>
+            <span>Administração</span>
+            <span class="seta">▶</span>
+        </div>
+        <div class="subitens" id="sub-administracao">
+            <a href="#" class="subitem"><span>Usuários</span></a>
+            <a href="#" class="subitem"><span>Grupos</span></a>
+            <a href="#" class="subitem"><span>Entidades</span></a>
+            <a href="#" class="subitem"><span>Regras</span></a>
+            <a href="#" class="subitem"><span>Formulários</span></a>
         </div>
     </div>
 
-    <!-- Filtros -->
-    <div class="filtros">
-        <input type="text" id="busca" placeholder="🔍 Buscar por título ou solicitante..." />
-        <select id="filtro-status">
-            <option value="">Todos os status</option>
-            <option value="Aberto">Aberto</option>
-            <option value="Em andamento">Em andamento</option>
-            <option value="Pendente">Pendente</option>
-            <option value="Resolvido">Resolvido</option>
-        </select>
-        <select id="filtro-prioridade">
-            <option value="">Todas as prioridades</option>
-            <option value="Baixa">Baixa</option>
-            <option value="Média">Média</option>
-            <option value="Alta">Alta</option>
-            <option value="Urgente">Urgente</option>
-        </select>
+    <div class="recolher">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"/></svg>
+        <span>Recolher Menu</span>
+    </div>
+</div>
+
+<!-- ===== CONTEÚDO ===== -->
+<div class="conteudo">
+
+    <!-- Cabeçalho -->
+    <div class="cabecalho">
+        <div class="breadcrumb">
+            <svg class="home-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>Home /</span>
+            <span>Painel do Técnico</span>
+        </div>
+        <div class="usuario-dropdown">
+            <span>Técnico</span>
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 10l5 5 5-5z"/></svg>
+        </div>
     </div>
 
-    <!-- Tabela -->
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Título</th>
-                <th>Status</th>
-                <th>Prioridade</th>
-                <th>Solicitante</th>
-                <th>Data</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody id="corpo-tabela">
-            <!-- Preenchido via JS -->
-        </tbody>
-    </table>
+    <!-- Visão Geral -->
+    <div class="visao-geral">
+        <!-- Filtros de visão -->
+        <div class="filtros-visao">
+            <span class="botao-visao ativo">Visão Pessoal</span>
+            <span class="botao-visao">Visão do Grupo</span>
+            <span class="botao-visao">Visão Global</span>
+            <span class="botao-visao">Feed RSS</span>
+            <span class="botao-visao">Formulários</span>
+            <span class="botao-visao">Todos</span>
+        </div>
 
-    <div class="footer">
-        GLPI Cpyright (C) 2015-2023 Teclib’ and contributors
+        <!-- Tabela -->
+        <table class="tabela-visao">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>REQUERENTE</th>
+                    <th>ELEMENTOS ASSOCIADOS</th>
+                    <th>DESCRIÇÃO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="id-chamado">t_9595</td>
+                    <td>Natalia Augusto</td>
+                    <td>SMS</td>
+                    <td>Inserir Novo Padrão</td>
+                </tr>
+                <tr>
+                    <td class="id-chamado">t_4545</td>
+                    <td>Natalia Augusto</td>
+                    <td>Geral</td>
+                    <td>Desativar Usuário</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
 <script>
-    // Mock de dados (simulação)
-    let chamados = [
-        { id: 1, titulo: "Impressora não imprime", status: "Aberto", prioridade: "Alta", solicitante: "João Silva", data: "2026-07-29" },
-        { id: 2, titulo: "Troca de senha", status: "Em andamento", prioridade: "Média", solicitante: "Maria Souza", data: "2026-07-28" },
-        { id: 3, titulo: "Falta espaço em disco", status: "Pendente", prioridade: "Baixa", solicitante: "Carlos Pereira", data: "2026-07-27" },
-        { id: 4, titulo: "Email não sincroniza", status: "Resolvido", prioridade: "Urgente", solicitante: "Ana Oliveira", data: "2026-07-26" },
-        { id: 5, titulo: "Atualizar antivírus", status: "Aberto", prioridade: "Média", solicitante: "Pedro Santos", data: "2026-07-25" }
-    ];
-
-    // Função para renderizar a tabela
-    function renderizar(lista) {
-        const tbody = document.getElementById('corpo-tabela');
-        if (lista.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px;">Nenhum chamado encontrado</td></tr>`;
-            return;
-        }
-        tbody.innerHTML = lista.map(c => {
-            // Define a classe do badge conforme status
-            let badgeClass = '';
-            switch(c.status) {
-                case 'Aberto': badgeClass = 'badge-novo'; break;
-                case 'Em andamento': badgeClass = 'badge-andamento'; break;
-                case 'Pendente': badgeClass = 'badge-pendente'; break;
-                case 'Resolvido': badgeClass = 'badge-resolvido'; break;
-                default: badgeClass = 'badge-fechado';
+    // ===== FUNÇÃO PARA ALTERNAR SUBITENS =====
+    document.querySelectorAll('.categoria').forEach(categoria => {
+        categoria.addEventListener('click', function(e) {
+            const targetId = this.dataset.target;
+            const subitens = document.getElementById(targetId);
+            if (subitens) {
+                subitens.classList.toggle('aberto');
+                const seta = this.querySelector('.seta');
+                if (seta) {
+                    seta.classList.toggle('aberta');
+                }
             }
-            return `
-                <tr>
-                    <td>#${c.id}</td>
-                    <td>${c.titulo}</td>
-                    <td><span class="badge ${badgeClass}">${c.status}</span></td>
-                    <td>${c.prioridade}</td>
-                    <td>${c.solicitante}</td>
-                    <td>${c.data}</td>
-                    <td><button class="btn-detalhe" onclick="detalhar(${c.id})">Detalhar</button></td>
-                </tr>
-            `;
-        }).join('');
-    }
-
-    // Função para filtrar
-    function filtrar() {
-        const busca = document.getElementById('busca').value.toLowerCase();
-        const status = document.getElementById('filtro-status').value;
-        const prioridade = document.getElementById('filtro-prioridade').value;
-
-        const filtrados = chamados.filter(c => {
-            const matchBusca = c.titulo.toLowerCase().includes(busca) || c.solicitante.toLowerCase().includes(busca);
-            const matchStatus = status === '' || c.status === status;
-            const matchPrioridade = prioridade === '' || c.prioridade === prioridade;
-            return matchBusca && matchStatus && matchPrioridade;
         });
-        renderizar(filtrados);
-    }
+    });
 
-    // Ação de detalhar (simulação)
-    function detalhar(id) {
-        const chamado = chamados.find(c => c.id === id);
-        if (chamado) {
-            alert(`Detalhes do chamado #${chamado.id}:\nTítulo: ${chamado.titulo}\nStatus: ${chamado.status}\nPrioridade: ${chamado.prioridade}\nSolicitante: ${chamado.solicitante}\nData: ${chamado.data}`);
-        }
-    }
-
-    // Eventos de filtro
-    document.getElementById('busca').addEventListener('input', filtrar);
-    document.getElementById('filtro-status').addEventListener('change', filtrar);
-    document.getElementById('filtro-prioridade').addEventListener('change', filtrar);
-
-    // Inicializa com todos
-    renderizar(chamados);
+    // ===== FUNÇÃO PARA OS BOTÕES DE VISÃO =====
+    document.querySelectorAll('.botao-visao').forEach(botao => {
+        botao.addEventListener('click', function() {
+            document.querySelectorAll('.botao-visao').forEach(b => b.classList.remove('ativo'));
+            this.classList.add('ativo');
+        });
+    });
 </script>
+
 </body>
 </html>
