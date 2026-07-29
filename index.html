@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - GLPI SIGPEC</title>
+    <title>Login - GLPI SIGPEC (Técnico)</title>
     <!-- Link para o CSS (que será único) -->
     <link rel="stylesheet" href="css/style.css" />
     <style>
@@ -191,7 +191,7 @@
     <!-- Quadro branco -->
     <div class="quadro-branco">
         <div class="login-inner">
-            <div class="login-title">Login na sua Conta</div>
+            <div class="login-title">Acesso do Técnico</div>
             <div class="line-separator"></div>
         </div>
 
@@ -228,14 +228,12 @@
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value.trim();
 
-        // Credenciais definidas
-        const isUsuario = (username === 'd123456' && password === 'brasil2026');
+        // Credencial única do técnico
         const isTecnico = (username === 'd225566' && password === 'sigpec00');
 
-        if (isUsuario) {
-            window.location.href = 'usuario/dashboard.html';
-        } else if (isTecnico) {
-            window.location.href = 'tecnico/dashboard.html';
+        if (isTecnico) {
+            // Redireciona para o dashboard do técnico (dentro da pasta tecnico/inicio/)
+            window.location.href = 'tecnico/inicio/index.html';
         } else {
             alert('Usuário ou senha inválidos!');
         }
