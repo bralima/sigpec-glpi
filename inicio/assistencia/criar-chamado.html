@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criar Chamado - GLPI SIGPEC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== RESET E BASE ===== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(145deg, #e8ecf1 0%, #d5dce6 100%);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ===== MENU LATERAL (mesmo estilo) ===== */
+        .menu-lateral {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 34px 10px;
+            gap: 652px;
+            width: 162px;
+            height: 100vh;
+            background: #1A397A;
+            flex-shrink: 0;
+            overflow-y: auto;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        .menu-lateral .requisicoes {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            width: 100%;
+        }
+        .menu-lateral .categoria {
+            width: 100%;
+            color: #FFFFFF;
+            font-size: 13px;
+            line-height: 16px;
+            cursor: pointer;
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 400;
+            transition: 0.1s;
+        }
+        .menu-lateral .categoria:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        .menu-lateral .categoria .icone {
+            width: 18px;
+            height: 18px;
+            fill: #FFFFFF;
+            flex-shrink: 0;
+        }
+        .menu-lateral .categoria .seta {
+            margin-left: auto;
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+        .menu-lateral .categoria .seta.aberta {
+            transform: rotate(90deg);
+        }
+        .menu-lateral .subitens {
+            display: none;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 26px;
+            gap: 4px;
+            width: 100%;
+            margin-bottom: 4px;
+        }
+        .menu-lateral .subitens.aberto {
+            display: flex;
+        }
+        .menu-lateral .subitens .subitem {
+            color: #FFFFFF;
+            font-size: 12px;
+            line-height: 14px;
+            text-decoration: none;
+            padding: 3px 0;
+            width: 100%;
+            transition: 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .menu-lateral .subitens .subitem:hover {
+            background: rgba(255,255,255,0.1);
+            padding-left: 4px;
+        }
+        .menu-lateral .subitens .subitem.ativo {
+            font-weight: 600;
+            background: rgba(255,255,255,0.15);
+        }
+        .menu-lateral .recolher {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #FFFFFF;
+            font-size: 14px;
+            line-height: 17px;
+            cursor: pointer;
+            width: 100%;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* ===== LAYOUT PRINCIPAL ===== */
+        .conteudo-wrapper {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .conteudo-central {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 24px 24px 24px;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        /* ===== BARRA LATERAL DIREITA ===== */
+        .barra-lateral {
+            width: 320px;
+            background: #FFFFFF;
+            padding: 20px 16px;
+            overflow-y: auto;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.06);
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .barra-lateral .card-lateral {
+            background: #F9FAFB;
+            border-radius: 10px;
+            padding: 14px 16px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .barra-lateral .card-lateral h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1A397A;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #D9DBDE;
+            padding-bottom: 6px;
+        }
+        .barra-lateral .campo-lateral {
+            margin-bottom: 12px;
+        }
+        .barra-lateral .campo-lateral label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+        .barra-lateral .campo-lateral input,
+        .barra-lateral .campo-lateral select {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #D9DBDE;
+            border-radius: 4px;
+            font-size: 12px;
+            background: #FFFFFF;
+        }
+        .barra-lateral .campo-lateral .entidade-fixa {
+            background: #E7E9F3;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #1A397A;
+            font-weight: 600;
+        }
+        .barra-lateral .btn-adicionar {
+            background: none;
+            border: 1px dashed #1A397A;
+            color: #1A397A;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            transition: 0.15s;
+        }
+        .barra-lateral .btn-adicionar:hover {
+            background: #f0f4ff;
+        }
+
+        /* ===== MULTISELECT COM TAGS (estilo do script) ===== */
+        .multiselect-wrapper {
+            width: 100%;
+        }
+        .multiselect-control {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+        .multiselect-control select {
+            flex: 1;
+            padding: 5px 8px;
+            border: 1px solid #D9DBDE;
+            border-radius: 4px;
+            font-size: 12px;
+            background: #FFFFFF;
+        }
+        .multiselect-control button {
+            background: #1A397A;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 0 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.1s;
+            white-space: nowrap;
+        }
+        .multiselect-control button:hover {
+            background: #0f2a5e;
+        }
+        .multiselect-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            min-height: 28px;
+            padding: 4px 6px;
+            background: #FFFFFF;
+            border: 1px solid #D9DBDE;
+            border-radius: 4px;
+            align-items: center;
+        }
+        .multiselect-tags .vazio {
+            font-size: 12px;
+            color: #999;
+        }
+        .multiselect-tags .tag {
+            background: #E7E9F3;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .multiselect-tags .tag .remove {
+            cursor: pointer;
+            font-weight: 700;
+            color: #c0392b;
+            font-size: 14px;
+            line-height: 1;
+        }
+        .multiselect-tags .tag .remove:hover {
+            color: #a93226;
+        }
+
+        /* ===== CABEÇALHO ===== */
+        .cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #FFFFFF;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+        .cabecalho .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #000;
+        }
+        .cabecalho .breadcrumb .home-icon { width: 18px; height: 18px; fill: #1A397A; }
+        .cabecalho .usuario-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: #000;
+            cursor: pointer;
+        }
+
+        /* ===== FORMULÁRIO ===== */
+        .form-card {
+            background: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 24px 28px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tecnico-nome {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1A397A;
+            margin-bottom: 12px;
+        }
+
+        .aviso-entidade {
+            background: #E7E9F3;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #1A397A;
+            margin-bottom: 18px;
+            border-left: 4px solid #1A397A;
+        }
+
+        .campo-titulo {
+            margin-bottom: 18px;
+        }
+        .campo-titulo label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #000;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .campo-titulo input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #D9DBDE;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Open Sans', sans-serif;
+        }
+        .campo-titulo input:focus {
+            border-color: #1A397A;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26,57,122,0.15);
+        }
+
+        /* Editor rico */
+        .editor-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #000;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .editor-ferramentas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 6px;
+            background: #F2F3F4;
+            padding: 6px 10px;
+            border-radius: 6px 6px 0 0;
+            border: 1px solid #D9DBDE;
+            border-bottom: none;
+        }
+        .editor-ferramentas button {
+            background: none;
+            border: 1px solid transparent;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            transition: 0.1s;
+        }
+        .editor-ferramentas button:hover {
+            background: #e0e4ed;
+            border-color: #b0b8c4;
+        }
+        .editor-conteudo {
+            min-height: 220px;
+            padding: 12px 14px;
+            border: 1px solid #D9DBDE;
+            border-radius: 0 0 6px 6px;
+            font-size: 14px;
+            line-height: 1.6;
+            background: #FFFFFF;
+            overflow-y: auto;
+            outline: none;
+            font-family: 'Open Sans', sans-serif;
+        }
+        .editor-conteudo:focus {
+            border-color: #1A397A;
+            box-shadow: 0 0 0 3px rgba(26,57,122,0.1);
+        }
+
+        .btn-enviar {
+            margin-top: 20px;
+            align-self: flex-end;
+            background: #1A397A;
+            color: #fff;
+            border: none;
+            padding: 10px 32px;
+            border-radius: 60px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 4px 12px rgba(26,57,122,0.3);
+        }
+        .btn-enviar:hover {
+            background: #0f2a5e;
+            transform: scale(1.02);
+        }
+        .btn-enviar:active {
+            transform: scale(0.97);
+        }
+
+        /* ===== MODAL DE SUCESSO ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(3px);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .modal-overlay.ativo {
+            display: flex;
+        }
+        .modal-box {
+            background: #FFFFFF;
+            max-width: 420px;
+            width: 90%;
+            padding: 36px 32px 28px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-box .icone-sucesso {
+            width: 64px;
+            height: 64px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: #fff;
+            font-size: 36px;
+            font-weight: 700;
+        }
+        .modal-box h3 {
+            font-size: 22px;
+            color: #1A397A;
+            margin-bottom: 8px;
+        }
+        .modal-box p {
+            color: #555;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        .modal-box .btn-fechar-modal {
+            background: #1A397A;
+            color: #fff;
+            border: none;
+            padding: 8px 28px;
+            border-radius: 60px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .modal-box .btn-fechar-modal:hover {
+            background: #0f2a5e;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 1024px) {
+            .barra-lateral { width: 260px; }
+        }
+        @media (max-width: 768px) {
+            .menu-lateral { width: 60px; padding: 20px 10px; gap: 40px; }
+            .menu-lateral .categoria span:not(.seta) { display: none; }
+            .menu-lateral .subitens { padding-left: 10px; }
+            .menu-lateral .subitens .subitem span { display: none; }
+            .menu-lateral .recolher span { display: none; }
+            .menu-lateral .categoria .seta { display: none; }
+            .conteudo-central { padding: 12px; }
+            .barra-lateral { width: 100%; max-height: 300px; flex-shrink: 0; }
+            .conteudo-wrapper { flex-direction: column; }
+            .form-card { padding: 16px; }
+            .editor-ferramentas button { font-size: 12px; padding: 2px 6px; }
+        }
+        @media (max-width: 480px) {
+            .cabecalho .breadcrumb span { font-size: 12px; }
+            .barra-lateral { padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== MENU LATERAL ===== -->
+<div class="menu-lateral">
+    <div class="requisicoes">
+        <!-- Assistência -->
+        <div class="categoria" data-target="sub-assistencia">
+            <svg class="icone" viewBox="0 0 24 24"><path d="M12 1C7.58 1 4 4.58 4 9v3c0 4.42 3.58 8 8 8s8-3.58 8-8v-3c0-4.42-3.58-8-8-8zm0 2c3.31 0 6 2.69 6 6v3c0 3.31-2.69 6-6 6s-6-2.69-6-6v-3c0-3.31 2.69-6 6-6z"/></svg>
+            <span>Assistência</span>
+            <span class="seta aberta">▼</span>
+        </div>
+        <div class="subitens aberto" id="sub-assistencia">
+            <a href="chamados.html" class="subitem"><span>Chamados</span></a>
+            <a href="criar-chamado.html" class="subitem ativo"><span>Criar Chamado</span></a>
+        </div>
+
+        <!-- Gerência -->
+        <div class="categoria" data-target="sub-gerencia">
+            <svg class="icone" viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
+            <span>Gerência</span>
+            <span class="seta">▶</span>
+        </div>
+        <div class="subitens" id="sub-gerencia">
+            <a href="../gerencia/padrao-acesso.html" class="subitem"><span>Padrão de Acesso</span></a>
+            <a href="../gerencia/perfil-setor.html" class="subitem"><span>Perfil de Setor</span></a>
+            <a href="../gerencia/docs.html" class="subitem"><span>Documentos</span></a>
+        </div>
+
+        <!-- Administração -->
+        <div class="categoria" data-target="sub-administracao">
+            <svg class="icone" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c4.41 0 8 3.59 8 8s-3.59 8-8 8-8-3.59-8-8 3.59-8 8-8zm-1 12h2v-2h-2v2zm0-4h2V7h-2v5z"/></svg>
+            <span>Administração</span>
+            <span class="seta">▶</span>
+        </div>
+        <div class="subitens" id="sub-administracao">
+            <a href="../admin/usuarios.html" class="subitem"><span>Usuários</span></a>
+            <a href="../admin/grupos.html" class="subitem"><span>Grupos</span></a>
+            <a href="../admin/forms.html" class="subitem"><span>Formulários</span></a>
+        </div>
+    </div>
+
+    <div class="recolher">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"/></svg>
+        <span>Recolher Menu</span>
+    </div>
+</div>
+
+<!-- ===== CONTEÚDO + BARRA LATERAL DIREITA ===== -->
+<div class="conteudo-wrapper">
+
+    <!-- ÁREA CENTRAL -->
+    <div class="conteudo-central">
+
+        <!-- Cabeçalho -->
+        <div class="cabecalho">
+            <div class="breadcrumb">
+                <svg class="home-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                <span>Home /</span>
+                <span>Assistência /</span>
+                <span style="color:#1A397A; font-weight:600;">Criar Chamado</span>
+            </div>
+            <div class="usuario-dropdown">
+                <span>Técnico</span>
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 10l5 5 5-5z"/></svg>
+            </div>
+        </div>
+
+        <!-- Card do formulário -->
+        <div class="form-card">
+            <div class="tecnico-nome">👤 Técnico: Karina Silva</div>
+
+            <div class="aviso-entidade">
+                ⚠️ Chamado será adicionado na entidade <strong>SEGES &gt; COGEP</strong>
+            </div>
+
+            <!-- Título -->
+            <div class="campo-titulo">
+                <label for="titulo">Título</label>
+                <input type="text" id="titulo" placeholder="Digite o título do chamado..." />
+            </div>
+
+            <!-- Editor de Descrição -->
+            <div>
+                <span class="editor-label">Descrição</span>
+                <div class="editor-ferramentas">
+                    <button data-comando="bold" title="Negrito"><b>N</b></button>
+                    <button data-comando="italic" title="Itálico"><i>I</i></button>
+                    <button data-comando="underline" title="Sublinhado"><u>U</u></button>
+                    <button data-comando="insertUnorderedList" title="Lista">•</button>
+                    <button data-comando="justifyLeft" title="Alinhar esquerda">≡←</button>
+                    <button data-comando="justifyCenter" title="Centralizar">≡↔</button>
+                    <button data-comando="justifyRight" title="Alinhar direita">≡→</button>
+                    <button data-comando="createLink" title="Inserir link">🔗</button>
+                    <button data-comando="insertImage" title="Inserir imagem">🖼️</button>
+                </div>
+                <div class="editor-conteudo" id="editorConteudo" contenteditable="true">
+                    <p><strong>Descreva seu problema:</strong></p>
+                    <p><br /></p>
+                    <p><strong>Lotação da URH:</strong> <em>(preencha aqui)</em></p>
+                    <p><br /></p>
+                    <p><strong>Em caso de Urgência favor Justificar, caso contrário não será possível considerar a urgência.</strong></p>
+                </div>
+            </div>
+
+            <button class="btn-enviar" id="btnEnviar">Enviar</button>
+        </div>
+    </div>
+
+    <!-- ===== BARRA LATERAL DIREITA ===== -->
+    <div class="barra-lateral">
+
+        <!-- Quadro 1: Chamado -->
+        <div class="card-lateral">
+            <h4>📋 Chamado</h4>
+            <div class="campo-lateral">
+                <label>Entidade</label>
+                <div class="entidade-fixa">SEGES &gt; COGEP</div>
+            </div>
+            <div class="campo-lateral">
+                <label>Data de abertura</label>
+                <input type="date" id="dataAbertura" />
+            </div>
+            <div class="campo-lateral">
+                <label>Tipo</label>
+                <select id="tipo">
+                    <option value="Inclusão">Inclusão</option>
+                    <option value="Exclusão">Exclusão</option>
+                    <option value="Pedidos">Pedidos</option>
+                </select>
+            </div>
+            <div class="campo-lateral">
+                <label>Status</label>
+                <select id="status">
+                    <option value="Novo">Novo</option>
+                    <option value="Em Atendimento">Em Atendimento</option>
+                    <option value="Pendente">Pendente</option>
+                    <option value="Resolvido">Resolvido</option>
+                    <option value="Fechado">Fechado</option>
+                </select>
+            </div>
+            <div class="campo-lateral">
+                <label>Urgência</label>
+                <select id="urgencia">
+                    <option value="Baixa">Baixa</option>
+                    <option value="Média" selected>Média</option>
+                    <option value="Alta">Alta</option>
+                </select>
+            </div>
+            <div class="campo-lateral">
+                <label>Localização (Secretaria)</label>
+                <select id="localizacao">
+                    <option value="SEGES">SEGES</option>
+                    <option value="SMS">SMS</option>
+                    <option value="SME">SME</option>
+                    <option value="SMT">SMT</option>
+                    <option value="SMDHC">SMDHC</option>
+                    <option value="SMDU">SMDU</option>
+                    <option value="SES">SES</option>
+                    <option value="SMC">SMC</option>
+                    <option value="SMJ">SMJ</option>
+                    <option value="SMSP">SMSP</option>
+                    <option value="SMO">SMO</option>
+                    <option value="SMSU">SMSU</option>
+                    <option value="SMG">SMG</option>
+                    <option value="SMPG">SMPG</option>
+                    <option value="SMTU">SMTU</option>
+                    <option value="SMP">SMP</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Quadro 2: Atores (com multiselect tags) -->
+        <div class="card-lateral">
+            <h4>👥 Atores</h4>
+
+            <!-- Requerente -->
+            <div class="campo-lateral">
+                <label>Requerente</label>
+                <div class="multiselect-wrapper" id="multiselectRequerente">
+                    <div class="multiselect-control">
+                        <select id="selectRequerente">
+                            <option value="">Selecione um requerente</option>
+                            <option value="Carlos Alberto">Carlos Alberto</option>
+                            <option value="Mariana Oliveira">Mariana Oliveira</option>
+                            <option value="João Santos">João Santos</option>
+                            <option value="Ana Paula">Ana Paula</option>
+                            <option value="Roberto Lima">Roberto Lima</option>
+                            <option value="Carla Mendes">Carla Mendes</option>
+                            <option value="Paulo Henrique">Paulo Henrique</option>
+                            <option value="Fernanda Souza">Fernanda Souza</option>
+                            <option value="Luciana Gomes">Luciana Gomes</option>
+                            <option value="Marcos Ribeiro">Marcos Ribeiro</option>
+                        </select>
+                        <button type="button" id="btnAddRequerente">Adicionar</button>
+                    </div>
+                    <div class="multiselect-tags" id="tagsRequerente">
+                        <span class="vazio">Nenhum requerente selecionado</span>
+                    </div>
+                    <input type="hidden" id="hiddenRequerente" value="" />
+                </div>
+            </div>
+
+            <!-- Observador -->
+            <div class="campo-lateral">
+                <label>Observador</label>
+                <div class="multiselect-wrapper" id="multiselectObservador">
+                    <div class="multiselect-control">
+                        <select id="selectObservador">
+                            <option value="">Selecione um observador</option>
+                            <option value="Karina Silva">Karina Silva</option>
+                            <option value="Fernanda Alves">Fernanda Alves</option>
+                            <option value="Rafael Costa">Rafael Costa</option>
+                            <option value="Patrícia Lima">Patrícia Lima</option>
+                        </select>
+                        <button type="button" id="btnAddObservador">Adicionar</button>
+                    </div>
+                    <div class="multiselect-tags" id="tagsObservador">
+                        <span class="vazio">Nenhum observador selecionado</span>
+                    </div>
+                    <input type="hidden" id="hiddenObservador" value="" />
+                </div>
+            </div>
+
+            <!-- Atribuído a -->
+            <div class="campo-lateral">
+                <label>Atribuído a</label>
+                <div class="multiselect-wrapper" id="multiselectAtribuido">
+                    <div class="multiselect-control">
+                        <select id="selectAtribuido">
+                            <option value="">Selecione um técnico</option>
+                            <option value="Karina Silva">Karina Silva</option>
+                            <option value="Fernanda Alves">Fernanda Alves</option>
+                            <option value="Rafael Costa">Rafael Costa</option>
+                            <option value="Patrícia Lima">Patrícia Lima</option>
+                        </select>
+                        <button type="button" id="btnAddAtribuido">Adicionar</button>
+                    </div>
+                    <div class="multiselect-tags" id="tagsAtribuido">
+                        <span class="vazio">Nenhum técnico selecionado</span>
+                    </div>
+                    <input type="hidden" id="hiddenAtribuido" value="" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Quadro 3: Chamado relacionado -->
+        <div class="card-lateral">
+            <h4>🔗 Chamado relacionado</h4>
+            <button class="btn-adicionar" id="btnAdicionarRelacionado">+ Adicionar</button>
+            <div id="listaRelacionados" style="margin-top:8px; font-size:12px; color:#555;"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== MODAL DE SUCESSO ===== -->
+<div class="modal-overlay" id="modalSucesso">
+    <div class="modal-box">
+        <div class="icone-sucesso">✓</div>
+        <h3>Chamado criado com sucesso!</h3>
+        <p>O chamado foi registrado e será encaminhado para o setor responsável.</p>
+        <button class="btn-fechar-modal" id="btnFecharModal">Ok</button>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // 1. EDITOR RICO
+    // ============================================================
+    const editor = document.getElementById('editorConteudo');
+    document.querySelectorAll('.editor-ferramentas button').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const comando = this.dataset.comando;
+            if (comando === 'createLink') {
+                const url = prompt('Digite a URL do link:', 'https://');
+                if (url) document.execCommand('createLink', false, url);
+            } else if (comando === 'insertImage') {
+                const url = prompt('Digite o URL da imagem:', 'https://');
+                if (url) document.execCommand('insertImage', false, url);
+            } else {
+                document.execCommand(comando, false, null);
+            }
+            editor.focus();
+        });
+    });
+
+    // ============================================================
+    // 2. DATA DE ABERTURA – preencher com hoje
+    // ============================================================
+    document.getElementById('dataAbertura').valueAsDate = new Date();
+
+    // ============================================================
+    // 3. MULTISELECT COMPONENT (genérico)
+    // ============================================================
+    function criarMultiselect(selectId, btnId, tagsContainerId, hiddenId) {
+        const select = document.getElementById(selectId);
+        const btn = document.getElementById(btnId);
+        const tagsContainer = document.getElementById(tagsContainerId);
+        const hidden = document.getElementById(hiddenId);
+        let tags = [];
+
+        function renderizarTags() {
+            tagsContainer.innerHTML = '';
+            if (tags.length === 0) {
+                tagsContainer.innerHTML = '<span class="vazio">Nenhum selecionado</span>';
+                hidden.value = '';
+                return;
+            }
+            tags.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'tag';
+                span.innerHTML = `${tag} <span class="remove" data-value="${tag}">×</span>`;
+                tagsContainer.appendChild(span);
+            });
+            hidden.value = tags.join(', ');
+
+            document.querySelectorAll(`#${tagsContainerId} .tag .remove`).forEach(el => {
+                el.addEventListener('click', function() {
+                    const valor = this.getAttribute('data-value');
+                    tags = tags.filter(t => t !== valor);
+                    renderizarTags();
+                    const option = select.querySelector(`option[value="${valor}"]`);
+                    if (option) option.disabled = false;
+                });
+            });
+        }
+
+        btn.addEventListener('click', function() {
+            const valor = select.value;
+            if (!valor) {
+                alert('Selecione um item para adicionar.');
+                return;
+            }
+            if (tags.includes(valor)) {
+                alert('Este item já foi adicionado.');
+                return;
+            }
+            tags.push(valor);
+            renderizarTags();
+            const option = select.querySelector(`option[value="${valor}"]`);
+            if (option) option.disabled = true;
+            select.value = '';
+        });
+
+        // Inicializa com valores vazios
+        renderizarTags();
+    }
+
+    // Inicializa os três multiselects
+    criarMultiselect('selectRequerente', 'btnAddRequerente', 'tagsRequerente', 'hiddenRequerente');
+    criarMultiselect('selectObservador', 'btnAddObservador', 'tagsObservador', 'hiddenObservador');
+    criarMultiselect('selectAtribuido', 'btnAddAtribuido', 'tagsAtribuido', 'hiddenAtribuido');
+
+    // ============================================================
+    // 4. CHAMADO RELACIONADO
+    // ============================================================
+    const listaRelacionados = document.getElementById('listaRelacionados');
+    document.getElementById('btnAdicionarRelacionado').addEventListener('click', function() {
+        const id = prompt('Digite o ID do chamado relacionado (ex: t_12345):');
+        if (id && id.trim()) {
+            const item = document.createElement('div');
+            item.textContent = `🔗 ${id.trim()}`;
+            item.style.cssText = 'background:#E7E9F3; padding:4px 8px; border-radius:4px; margin-top:4px; display:inline-block;';
+            listaRelacionados.appendChild(item);
+        }
+    });
+
+    // ============================================================
+    // 5. ENVIAR – exibe modal de sucesso
+    // ============================================================
+    document.getElementById('btnEnviar').addEventListener('click', function() {
+        const titulo = document.getElementById('titulo').value.trim();
+        if (!titulo) {
+            alert('Por favor, preencha o título.');
+            return;
+        }
+        document.getElementById('modalSucesso').classList.add('ativo');
+    });
+
+    document.getElementById('btnFecharModal').addEventListener('click', function() {
+        document.getElementById('modalSucesso').classList.remove('ativo');
+    });
+
+    document.getElementById('modalSucesso').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('ativo');
+        }
+    });
+
+    // ============================================================
+    // 6. MENU LATERAL
+    // ============================================================
+    document.querySelectorAll('.categoria[data-target]').forEach(cat => {
+        cat.addEventListener('click', function(e) {
+            const targetId = this.dataset.target;
+            const sub = document.getElementById(targetId);
+            if (sub) {
+                sub.classList.toggle('aberto');
+                const seta = this.querySelector('.seta');
+                if (seta) seta.classList.toggle('aberta');
+            }
+        });
+    });
+
+    document.querySelector('.recolher')?.addEventListener('click', function() {
+        document.querySelectorAll('.subitens').forEach(s => s.classList.remove('aberto'));
+        document.querySelectorAll('.seta').forEach(s => s.classList.remove('aberta'));
+    });
+</script>
+
+</body>
+</html>
