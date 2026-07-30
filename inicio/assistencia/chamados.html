@@ -10,150 +10,132 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Open Sans', sans-serif;
-            background: linear-gradient(145deg, #e8ecf1 0%, #d5dce6 100%);
+            background: #e8ecf1;
             display: flex;
             height: 100vh;
             overflow: hidden;
         }
 
-        /* ===== MENU LATERAL ===== */
+        /* ===== MENU LATERAL FIXO ===== */
         .menu-lateral {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 34px 10px;
-            gap: 652px;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 162px;
             height: 100vh;
             background: #1A397A;
-            flex-shrink: 0;
-            overflow-y: auto;
-            box-shadow: 2px 0 12px rgba(0,0,0,0.15);
-        }
-        .menu-lateral .requisicoes {
+            z-index: 999999;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 8px;
-            width: 100%;
+            padding: 34px 10px;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+            overflow-y: auto;
         }
-        .menu-lateral .categoria {
-            width: 100%;
+        .menu-lateral .menu-requisicoes {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .menu-lateral .menu-categoria {
             color: #FFFFFF;
             font-size: 13px;
-            line-height: 16px;
             cursor: pointer;
             padding: 4px 0;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-weight: 400;
             transition: 0.1s;
         }
-        .menu-lateral .categoria:hover {
+        .menu-lateral .menu-categoria:hover {
             background: rgba(255,255,255,0.08);
         }
-       .menu-lateral .categoria .icone {
+        .menu-lateral .menu-categoria .menu-icone {
             width: 18px;
             height: 18px;
             fill: #FFFFFF;
             flex-shrink: 0;
         }
-        .menu-lateral .categoria .seta {
+        .menu-lateral .menu-categoria .menu-seta {
             margin-left: auto;
             transition: transform 0.2s;
             font-size: 12px;
         }
-        .menu-lateral .categoria .seta.aberta {
+        .menu-lateral .menu-categoria .menu-seta.aberta {
             transform: rotate(90deg);
         }
-        .menu-lateral .subitens {
+
+        .menu-lateral .menu-subitens {
             display: none;
             flex-direction: column;
-            align-items: flex-start;
             padding-left: 26px;
             gap: 4px;
             width: 100%;
             margin-bottom: 4px;
         }
-        .menu-lateral .subitens.aberto {
+        .menu-lateral .menu-subitens.aberto {
             display: flex;
         }
-        .menu-lateral .subitens .subitem {
+        .menu-lateral .menu-subitens .menu-subitem {
             color: #FFFFFF;
             font-size: 12px;
-            line-height: 14px;
             text-decoration: none;
             padding: 3px 0;
-            width: 100%;
-            transition: 0.1s;
             display: flex;
             align-items: center;
             gap: 6px;
+            transition: 0.1s;
         }
-        .menu-lateral .subitens .subitem:hover {
+        .menu-lateral .menu-subitens .menu-subitem:hover {
             background: rgba(255,255,255,0.1);
             padding-left: 4px;
         }
-        .menu-lateral .subitens .subitem.ativo {
+        .menu-lateral .menu-subitens .menu-subitem.ativo {
             font-weight: 600;
             background: rgba(255,255,255,0.15);
         }
-        .menu-lateral .recolher {
+
+        .menu-lateral .menu-recolher {
             display: flex;
             align-items: center;
             gap: 10px;
             color: #FFFFFF;
             font-size: 14px;
-            line-height: 17px;
             cursor: pointer;
-            width: 100%;
             padding-top: 10px;
             border-top: 1px solid rgba(255,255,255,0.1);
         }
 
         /* ===== CONTEÚDO ===== */
-        .conteudo {
+        .conteudo-wrapper {
+            margin-left: 162px;
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding: 20px 24px 24px 24px;
             height: 100vh;
             overflow-y: auto;
+            background: linear-gradient(145deg, #e8ecf1 0%, #d5dce6 100%);
+            padding: 20px 24px 24px 24px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Cabeçalho */
         .cabecalho {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             background: #FFFFFF;
             padding: 12px 20px;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             margin-bottom: 20px;
-            flex-shrink: 0;
-        }
-        .cabecalho .breadcrumb {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: #000;
         }
+        .cabecalho .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #000; }
         .cabecalho .breadcrumb .home-icon { width: 18px; height: 18px; fill: #1A397A; }
-        .cabecalho .usuario-dropdown {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            color: #000;
-            cursor: pointer;
-        }
+        .cabecalho .usuario-dropdown { display: flex; align-items: center; gap: 6px; font-size: 14px; color: #000; cursor: pointer; }
 
-        /* ===== CATEGORIAS (filtros rápidos) ===== */
-        .categorias {
+        /* ===== FILTROS DE STATUS (conteúdo) ===== */
+        .filtros-status {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
@@ -162,37 +144,35 @@
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             margin-bottom: 16px;
-            flex-shrink: 0;
         }
-        .categoria {
+        .filtro-status-item {
             padding: 4px 14px;
             border-radius: 20px;
             font-size: 13px;
             font-weight: 600;
-            color: #000;
             cursor: pointer;
-            transition: 0.15s;
             background: #f0f2f5;
+            color: #000;
+            transition: 0.15s;
         }
-        .categoria:hover { opacity: 0.8; }
-        .categoria.todos { background: #FAD954; }
-        .categoria.novo { background: #79D064; color: #fff; }
-        .categoria.atribuido { background: #EBF4F7; }
-        .categoria.aguardando { background: #FACB7C; }
-        .categoria.validar { background: #6C98D6; color: #fff; }
-        .categoria.solucionado { background: #D7D7D7; }
-        .categoria.fechado { background: #515151; color: #D9D9D9; }
+        .filtro-status-item:hover { opacity: 0.8; }
+        .filtro-status-item.todos { background: #FAD954; }
+        .filtro-status-item.novo { background: #79D064; color: #fff; }
+        .filtro-status-item.atribuido { background: #EBF4F7; }
+        .filtro-status-item.aguardando { background: #FACB7C; }
+        .filtro-status-item.validar { background: #6C98D6; color: #fff; }
+        .filtro-status-item.solucionado { background: #D7D7D7; }
+        .filtro-status-item.fechado { background: #515151; color: #D9D9D9; }
 
         /* ===== FILTROS AVANÇADOS ===== */
-        .filtros {
+        .filtros-avancados {
             background: #FFFFFF;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             margin-bottom: 16px;
-            flex-shrink: 0;
             overflow: hidden;
         }
-        .filtros .linha-cima {
+        .filtros-avancados .linha-cima {
             background: #E7E9F3;
             padding: 6px 15px;
             display: flex;
@@ -201,7 +181,7 @@
             gap: 10px;
             min-height: 34px;
         }
-        .filtros .linha-baixo {
+        .filtros-avancados .linha-baixo {
             background: #FFFFFF;
             padding: 6px 15px;
             display: flex;
@@ -210,7 +190,7 @@
             gap: 10px;
             min-height: 34px;
         }
-        .filtro-item {
+        .filtro-avancado-item {
             display: inline-flex;
             align-items: center;
             background: #FFFFFF;
@@ -224,22 +204,10 @@
             gap: 4px;
             border-radius: 3px;
         }
-        .filtro-item .arrow {
-            width: 12px;
-            height: 12px;
-            fill: #1C1B1F;
-        }
-        .filtro-item.destaque {
-            background: #736EB9;
-            color: #FFFFFF;
-            border-color: #E7E7E7;
-        }
-        .filtro-item.destaque .arrow { fill: #FFFFFF; }
-        .icone-acao {
-            width: 15px;
-            height: 15px;
-            cursor: pointer;
-        }
+        .filtro-avancado-item .arrow { width: 12px; height: 12px; fill: #1C1B1F; }
+        .filtro-avancado-item.destaque { background: #736EB9; color: #FFFFFF; border-color: #E7E7E7; }
+        .filtro-avancado-item.destaque .arrow { fill: #FFFFFF; }
+        .icone-acao { width: 15px; height: 15px; cursor: pointer; }
         .icone-acao.star { fill: #5B5083; }
         .icone-acao.x { fill: #5B5083; }
 
@@ -266,8 +234,7 @@
             border-bottom: 2px solid #D9D9D9;
             position: sticky;
             top: 0;
-            z-index: 2;
-            white-space: nowrap;
+            z-index: 1;
         }
         .tabela-chamados td {
             padding: 10px 12px;
@@ -275,137 +242,94 @@
             color: #000;
             vertical-align: middle;
         }
-        .tabela-chamados tr:last-child td {
-            border-bottom: none;
-        }
-        .tabela-chamados tr:nth-child(even) {
-            background: #FFFFFF;
-        }
-        .tabela-chamados tr:nth-child(odd) {
-            background: #F9FAFB;
-        }
+        .tabela-chamados tr:last-child td { border-bottom: none; }
+        .tabela-chamados tr:nth-child(even) { background: #FFFFFF; }
+        .tabela-chamados tr:nth-child(odd) { background: #F9FAFB; }
 
-        /* Status com bolinha */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 600;
-        }
-        .status-badge .circle {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-        }
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+        .status-badge .circle { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
         .circle-novo { background: #28a745; }
         .circle-atendimento { background: #007bff; }
         .circle-pendente { background: #fd7e14; }
         .circle-resolvido { background: #17a2b8; }
         .circle-fechado { background: #6c757d; }
 
-        /* Prioridade */
-        .prioridade {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .prioridade .quadrado {
-            width: 12px;
-            height: 12px;
-            background: #dc3545;
-            display: inline-block;
-            border-radius: 2px;
-        }
+        .prioridade { display: inline-flex; align-items: center; gap: 6px; }
+        .prioridade .quadrado { width: 12px; height: 12px; background: #dc3545; display: inline-block; border-radius: 2px; }
 
-        /* Categoria */
-        .categoria-texto {
-            font-size: 12px;
-            background: #f0f0f0;
-            padding: 2px 8px;
-            border-radius: 12px;
-            white-space: nowrap;
-        }
+        .categoria-texto { font-size: 12px; background: #f0f0f0; padding: 2px 8px; border-radius: 12px; white-space: nowrap; }
+        .localizacao { font-size: 12px; background: #e9ecef; padding: 2px 8px; border-radius: 12px; }
 
-        /* Localização */
-        .localizacao {
-            font-size: 12px;
-            background: #e9ecef;
-            padding: 2px 8px;
-            border-radius: 12px;
-        }
-
-        /* ===== RESPONSIVO ===== */
         @media (max-width: 768px) {
-            .menu-lateral { width: 60px; padding: 20px 10px; gap: 40px; }
-            .menu-lateral .categoria span:not(.seta) { display: none; }
-            .menu-lateral .subitens { padding-left: 10px; }
-            .menu-lateral .subitens .subitem span { display: none; }
-            .menu-lateral .recolher span { display: none; }
-            .menu-lateral .categoria .seta { display: none; }
-            .conteudo { padding: 12px; }
-            .categorias { padding: 10px; }
-            .filtros .linha-cima, .filtros .linha-baixo { flex-wrap: wrap; height: auto; padding: 6px 10px; }
+            .menu-lateral { width: 60px; padding: 20px 10px; }
+            .menu-lateral .menu-categoria span:not(.menu-seta) { display: none; }
+            .menu-lateral .menu-subitens { padding-left: 10px; }
+            .menu-lateral .menu-subitens .menu-subitem span { display: none; }
+            .menu-lateral .menu-recolher span { display: none; }
+            .menu-lateral .menu-categoria .menu-seta { display: none; }
+            .conteudo-wrapper { margin-left: 60px; padding: 12px; }
+            .filtros-status { padding: 10px; }
+            .filtros-avancados .linha-cima,
+            .filtros-avancados .linha-baixo { flex-wrap: wrap; height: auto; padding: 6px 10px; }
             .tabela-chamados { font-size: 11px; }
             .tabela-chamados th, .tabela-chamados td { padding: 6px 8px; }
         }
         @media (max-width: 480px) {
             .cabecalho .breadcrumb span { font-size: 12px; }
-            .categoria { font-size: 11px; padding: 2px 10px; }
+            .filtro-status-item { font-size: 11px; padding: 2px 10px; }
         }
     </style>
 </head>
 <body>
 
-<!-- ===== MENU LATERAL ===== -->
+<!-- ===== MENU LATERAL FIXO ===== -->
 <div class="menu-lateral">
-    <div class="requisicoes">
+    <div class="menu-requisicoes">
         <!-- Assistência -->
-        <div class="categoria" data-target="sub-assistencia">
-            <svg class="icone" viewBox="0 0 24 24"><path d="M12 1C7.58 1 4 4.58 4 9v3c0 4.42 3.58 8 8 8s8-3.58 8-8v-3c0-4.42-3.58-8-8-8zm0 2c3.31 0 6 2.69 6 6v3c0 3.31-2.69 6-6 6s-6-2.69-6-6v-3c0-3.31 2.69-6 6-6z"/></svg>
+        <div class="menu-categoria" data-target="sub-assistencia">
+            <svg class="menu-icone" viewBox="0 0 24 24"><path d="M12 1C7.58 1 4 4.58 4 9v3c0 4.42 3.58 8 8 8s8-3.58 8-8v-3c0-4.42-3.58-8-8-8zm0 2c3.31 0 6 2.69 6 6v3c0 3.31-2.69 6-6 6s-6-2.69-6-6v-3c0-3.31 2.69-6 6-6z"/></svg>
             <span>Assistência</span>
-            <span class="seta aberta">▼</span>
+            <span class="menu-seta aberta">▼</span>
         </div>
-        <div class="subitens aberto" id="sub-assistencia">
-            <a href="chamados.html" class="subitem ativo"><span>Chamados</span></a>
-            <a href="criar-chamado.html" class="subitem"><span>Criar Chamado</span></a>
+        <div class="menu-subitens aberto" id="sub-assistencia">
+            <a href="chamados.html" class="menu-subitem ativo"><span>Chamados</span></a>
+            <a href="criar-chamado.html" class="menu-subitem"><span>Criar Chamado</span></a>
         </div>
 
         <!-- Gerência -->
-        <div class="categoria" data-target="sub-gerencia">
-            <svg class="icone" viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
+        <div class="menu-categoria" data-target="sub-gerencia">
+            <svg class="menu-icone" viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
             <span>Gerência</span>
-            <span class="seta">▶</span>
+            <span class="menu-seta">▶</span>
         </div>
-        <div class="subitens" id="sub-gerencia">
-            <a href="../gerencia/padrao-acesso.html" class="subitem"><span>Padrão de Acesso</span></a>
-            <a href="../gerencia/perfil-setor.html" class="subitem"><span>Perfil de Setor</span></a>
-            <a href="../gerencia/docs.html" class="subitem"><span>Documentos</span></a>
+        <div class="menu-subitens" id="sub-gerencia">
+            <a href="../gerencia/padrao-acesso.html" class="menu-subitem"><span>Padrão de Acesso</span></a>
+            <a href="../gerencia/perfil-setor.html" class="menu-subitem"><span>Perfil de Setor</span></a>
+            <a href="../gerencia/docs.html" class="menu-subitem"><span>Documentos</span></a>
         </div>
 
         <!-- Administração -->
-        <div class="categoria" data-target="sub-administracao">
-            <svg class="icone" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c4.41 0 8 3.59 8 8s-3.59 8-8 8-8-3.59-8-8 3.59-8 8-8zm-1 12h2v-2h-2v2zm0-4h2V7h-2v5z"/></svg>
+        <div class="menu-categoria" data-target="sub-administracao">
+            <svg class="menu-icone" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c4.41 0 8 3.59 8 8s-3.59 8-8 8-8-3.59-8-8 3.59-8 8-8zm-1 12h2v-2h-2v2zm0-4h2V7h-2v5z"/></svg>
             <span>Administração</span>
-            <span class="seta">▶</span>
+            <span class="menu-seta">▶</span>
         </div>
-        <div class="subitens" id="sub-administracao">
-            <a href="../admin/usuarios.html" class="subitem"><span>Usuários</span></a>
-            <a href="../admin/grupos.html" class="subitem"><span>Grupos</span></a>
-            <a href="../admin/forms.html" class="subitem"><span>Formulários</span></a>
+        <div class="menu-subitens" id="sub-administracao">
+            <a href="../admin/usuarios.html" class="menu-subitem"><span>Usuários</span></a>
+            <a href="../admin/grupos.html" class="menu-subitem"><span>Grupos</span></a>
+            <a href="../admin/forms.html" class="menu-subitem"><span>Formulários</span></a>
         </div>
     </div>
 
-    <div class="recolher">
+    <div class="menu-recolher">
         <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"/></svg>
         <span>Recolher Menu</span>
     </div>
 </div>
 
 <!-- ===== CONTEÚDO ===== -->
-<div class="conteudo">
-
-    <!-- Cabeçalho -->
+<div class="conteudo-wrapper">
+    <!-- cabeçalho -->
     <div class="cabecalho">
         <div class="breadcrumb">
             <svg class="home-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -419,92 +343,63 @@
         </div>
     </div>
 
-    <!-- Categorias (filtros rápidos) -->
-    <div class="categorias">
-        <span class="categoria todos">0 Todos</span>
-        <span class="categoria novo">0 Novo</span>
-        <span class="categoria atribuido">0 Atribuído</span>
-        <span class="categoria aguardando">0 Aguardando</span>
-        <span class="categoria validar">0 Validar</span>
-        <span class="categoria solucionado">0 Solucionado</span>
-        <span class="categoria fechado">0 Fechado</span>
+    <!-- FILTROS DE STATUS (conteúdo) -->
+    <div class="filtros-status">
+        <span class="filtro-status-item todos">0 Todos</span>
+        <span class="filtro-status-item novo">0 Novo</span>
+        <span class="filtro-status-item atribuido">0 Atribuído</span>
+        <span class="filtro-status-item aguardando">0 Aguardando</span>
+        <span class="filtro-status-item validar">0 Validar</span>
+        <span class="filtro-status-item solucionado">0 Solucionado</span>
+        <span class="filtro-status-item fechado">0 Fechado</span>
     </div>
 
-    <!-- Filtros avançados -->
-    <div class="filtros">
+    <!-- FILTROS AVANÇADOS -->
+    <div class="filtros-avancados">
         <div class="linha-cima">
-            <span class="filtro-item">
-                <svg width="16" height="16" viewBox="0 0 24 24"><rect width="18" height="18" fill="#1C1B1F"/></svg>
-            </span>
-            <span class="filtro-item">
-                ---- <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </span>
-            <span class="filtro-item">
-                Edições - Status <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </span>
-            <span class="filtro-item">
-                é <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </span>
-            <span class="filtro-item">
-                Todos <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </span>
+            <span class="filtro-avancado-item"><svg width="16" height="16" viewBox="0 0 24 24"><rect width="18" height="18" fill="#1C1B1F"/></svg></span>
+            <span class="filtro-avancado-item">---- <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></span>
+            <span class="filtro-avancado-item">Edições - Status <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></span>
+            <span class="filtro-avancado-item">é <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></span>
+            <span class="filtro-avancado-item">Todos <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></span>
         </div>
         <div class="linha-baixo">
-            <span class="filtro-item" style="border-color:#000;">
-                é <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </span>
-            <span class="filtro-item" style="border-color:#000;">
-                Edições - Status <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </span>
-            <span class="filtro-item destaque">
-                ---- <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </span>
+            <span class="filtro-avancado-item" style="border-color:#000;">é <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></span>
+            <span class="filtro-avancado-item" style="border-color:#000;">Edições - Status <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></span>
+            <span class="filtro-avancado-item destaque">---- <svg class="arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></span>
             <svg class="icone-acao star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
             <svg class="icone-acao x" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
         </div>
     </div>
 
-    <!-- Tabela de Chamados -->
+    <!-- TABELA -->
     <div class="tabela-wrapper">
         <table class="tabela-chamados" id="tabela-chamados">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Status</th>
-                    <th>Data Abertura</th>
-                    <th>Última Atualização</th>
-                    <th>Prioridade</th>
-                    <th>Requerente</th>
-                    <th>Técnico</th>
-                    <th>Categoria</th>
-                    <th>Localização</th>
+                    <th>ID</th><th>Título</th><th>Status</th><th>Data Abertura</th>
+                    <th>Última Atualização</th><th>Prioridade</th><th>Requerente</th>
+                    <th>Técnico</th><th>Categoria</th><th>Localização</th>
                 </tr>
             </thead>
-            <tbody id="corpo-tabela">
-                <!-- Preenchido via JS -->
-            </tbody>
+            <tbody id="corpo-tabela"></tbody>
         </table>
     </div>
 </div>
 
 <script>
     // ============================================================
-    // DADOS MOCK – COM LOCALIZAÇÕES ALEATÓRIAS
+    // DADOS MOCK DOS CHAMADOS (VERSÃO TÉCNICO)
     // ============================================================
-
-    // Lista de siglas de secretarias da Prefeitura de SP
     const secretarias = [
         'SEGES', 'SMS', 'SME', 'SMT', 'SMDHC', 'SMDU', 'SES', 'SMC', 
         'SMJ', 'SMSP', 'SMO', 'SMSU', 'SMG', 'SMPG', 'SMTU', 'SMP'
     ];
 
-    // Função para pegar uma sigla aleatória
     function randomSecretaria() {
         return secretarias[Math.floor(Math.random() * secretarias.length)];
     }
 
-    // Lista base de chamados (sem localização fixa)
     const baseChamados = [
         // Inclusão
         {
@@ -597,7 +492,6 @@
             dataAbertura: '28-06-2026 09:00',
             ultimaAtualizacao: '28-06-2026 09:30'
         },
-        // Extras para diversificar
         {
             id: 't_72820',
             titulo: 'Inclusão de Novo Setor',
@@ -622,25 +516,14 @@
         }
     ];
 
-    // ============================================================
-    // FUNÇÃO PARA GERAR LOCALIZAÇÕES ALEATÓRIAS E RENDERIZAR
-    // ============================================================
-
     function gerarChamadosComLocalizacao() {
-        return baseChamados.map(chamado => {
-            // Se for "Solicitação de Relatório", pode deixar sem técnico
-            const tecnicoFinal = chamado.tecnico || '—';
-            return {
-                ...chamado,
-                tecnico: tecnicoFinal,
-                localizacao: `PMSP/${randomSecretaria()}`
-            };
-        });
+        return baseChamados.map(chamado => ({
+            ...chamado,
+            tecnico: chamado.tecnico || '—',
+            localizacao: `PMSP/${randomSecretaria()}`
+        }));
     }
 
-    // ============================================================
-    // RENDERIZAÇÃO DA TABELA
-    // ============================================================
     function renderizarTabela(dados) {
         const tbody = document.getElementById('corpo-tabela');
         if (!tbody) return;
@@ -683,7 +566,6 @@
                 </tr>
             `;
         });
-
         tbody.innerHTML = html;
     }
 
@@ -694,7 +576,6 @@
         const chamados = gerarChamadosComLocalizacao();
         renderizarTabela(chamados);
 
-        // Atualizar contagens nas categorias
         const contagem = {
             todos: chamados.length,
             novo: chamados.filter(c => c.status === 'Novo').length,
@@ -705,39 +586,39 @@
             fechado: chamados.filter(c => c.status === 'Fechado').length
         };
 
-        document.querySelector('.categoria.todos').textContent = `${contagem.todos} Todos`;
-        document.querySelector('.categoria.novo').textContent = `${contagem.novo} Novo`;
-        document.querySelector('.categoria.atribuido').textContent = `${contagem.atribuido} Atribuído`;
-        document.querySelector('.categoria.aguardando').textContent = `${contagem.aguardando} Aguardando`;
-        document.querySelector('.categoria.validar').textContent = `${contagem.validar} Validar`;
-        document.querySelector('.categoria.solucionado').textContent = `${contagem.solucionado} Solucionado`;
-        document.querySelector('.categoria.fechado').textContent = `${contagem.fechado} Fechado`;
+        document.querySelector('.filtro-status-item.todos').textContent = `${contagem.todos} Todos`;
+        document.querySelector('.filtro-status-item.novo').textContent = `${contagem.novo} Novo`;
+        document.querySelector('.filtro-status-item.atribuido').textContent = `${contagem.atribuido} Atribuído`;
+        document.querySelector('.filtro-status-item.aguardando').textContent = `${contagem.aguardando} Aguardando`;
+        document.querySelector('.filtro-status-item.validar').textContent = `${contagem.validar} Validar`;
+        document.querySelector('.filtro-status-item.solucionado').textContent = `${contagem.solucionado} Solucionado`;
+        document.querySelector('.filtro-status-item.fechado').textContent = `${contagem.fechado} Fechado`;
     });
 
     // ============================================================
-    // INTERAÇÃO: Menu lateral
+    // INTERAÇÃO: Menu lateral (toggle)
     // ============================================================
-    document.querySelectorAll('.categoria[data-target]').forEach(cat => {
+    document.querySelectorAll('.menu-categoria[data-target]').forEach(cat => {
         cat.addEventListener('click', function(e) {
             const targetId = this.dataset.target;
             const sub = document.getElementById(targetId);
             if (sub) {
                 sub.classList.toggle('aberto');
-                const seta = this.querySelector('.seta');
+                const seta = this.querySelector('.menu-seta');
                 if (seta) seta.classList.toggle('aberta');
             }
         });
     });
 
-    document.querySelector('.recolher')?.addEventListener('click', function() {
-        document.querySelectorAll('.subitens').forEach(s => s.classList.remove('aberto'));
-        document.querySelectorAll('.seta').forEach(s => s.classList.remove('aberta'));
+    document.querySelector('.menu-recolher')?.addEventListener('click', function() {
+        document.querySelectorAll('.menu-subitens').forEach(s => s.classList.remove('aberto'));
+        document.querySelectorAll('.menu-seta').forEach(s => s.classList.remove('aberta'));
     });
 
-    // Filtros rápidos (visual)
-    document.querySelectorAll('.categoria').forEach(cat => {
-        cat.addEventListener('click', function() {
-            document.querySelectorAll('.categoria').forEach(c => c.style.outline = 'none');
+    // Filtros de status (visual)
+    document.querySelectorAll('.filtro-status-item').forEach(item => {
+        item.addEventListener('click', function() {
+            document.querySelectorAll('.filtro-status-item').forEach(el => el.style.outline = 'none');
             this.style.outline = '2px solid #1A397A';
         });
     });
